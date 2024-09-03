@@ -11,6 +11,17 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            if ($user->role === 'job_seeker') {
+                Job_seeker::create([
+                    'user_id' => $user->id,
+                    // You can set default values or leave them null
+                ]);
+            }
+        });
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -43,5 +54,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function job_seeker()
+    {
+        return $this->hasOne(Job_seeker::class);
     }
 }

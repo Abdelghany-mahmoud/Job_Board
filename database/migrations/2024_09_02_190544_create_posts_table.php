@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('benefits');
             $table->string('location');
             // $table->json('technologies');
-            $table->foreignId('category_id')->constrained('categories')->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreignId('category_id')->constrained('categories')->onUpdate('cascade')->onDelete('cascade');
             $table->enum('work_type',['remote','on_site','hybrid']);
             $table->decimal('min_salary',10,2);
             $table->decimal('max_salary',10,2);
