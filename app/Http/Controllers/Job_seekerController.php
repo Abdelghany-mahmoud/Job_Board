@@ -71,17 +71,18 @@ class Job_seekerController extends Controller
         ]);
     
         // Handling the profile picture upload
+        // if ($request->hasFile('profile_pic')) {
+        //     // Store the new profile picture
+        //     $filePath = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
+        //     $job_seeker->profile_pic = $filePath;
+        // }
+        
         if ($request->hasFile('profile_pic')) {
-            // Delete the old profile picture if it exists
-            if ($job_seeker->profile_pic) {
-                Storage::delete($job_seeker->profile_pic);
-            }
-    
             // Store the new profile picture
-            $filePath = $request->file('profile_pic')->store('profile_pics', 'public');
+            $filePath = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
             $job_seeker->profile_pic = $filePath;
         }
-    
+        
         // Update fields in the users table
         $user->name = $request->input('name');
         $user->email = $request->input('email');
