@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Technology;
 use Illuminate\Http\Request;
-use App\Models\YourModel; // Replace with your model name
+// use App\Models\YourModel; // Replace with your model name
 
 class SearchController extends Controller
 {

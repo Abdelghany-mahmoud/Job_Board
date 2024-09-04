@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
 
-class postsController extends Controller
+class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -39,8 +39,8 @@ class postsController extends Controller
     {        
         $data = $request->validated();
         // dd($data);
-        // $data['user_id']= Auth::id();
-        $data['user_id']= 1;
+        $data['user_id']= Auth::id();
+        // $data['user_id']= 1;
         $technologies = $request->technologies;
         $post = Post::create($data);
 
