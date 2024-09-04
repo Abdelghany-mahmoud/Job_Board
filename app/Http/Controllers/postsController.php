@@ -8,6 +8,7 @@ use App\Models\Technology;
 use App\Models\Technologies_post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StorePostRequest;
 
 class postsController extends Controller
 {
@@ -16,8 +17,9 @@ class postsController extends Controller
      */
     public function index()
     {
-        //
-
+        $posts = Post::all();
+        $Technologies_post = Technologies_post::all();
+        return view('posts.index', ["posts" => $posts,'Technologies_post' => $Technologies_post]);
     }
 
     /**
@@ -33,31 +35,22 @@ class postsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        // dd($request);
+    public function store(StorePostRequest $request)
+    {        
+        $data = $request->validated();
+        // dd($data);
+        // $data['user_id']= Auth::id();
+        $data['user_id']= 1;
         $technologies = $request->technologies;
-        $post = Post::create([
-            // 'user_id' => Auth::id(),
-            'user_id' => 1,
-            'title'=>$request->title,
-            'category_id'=>$request->category_id,
-            'description'=>$request->description,
-            'requirements'=>$request->requirements,
-            'responsibilities'=>$request->responsibilities,
-            'benefits'=>$request->benefits,
-            'location'=>$request->location,
-            'work_type'=>$request->work_type,
-            'min_salary'=>$request->min_salary,
-            'max_salary'=>$request->max_salary,
-            'application_deadline'=>$request->application_deadline,
-        ]);
+        $post = Post::create($data);
+
         foreach ($technologies as $technology) {
             Technologies_post::insert([
                 'post_id' => $post->id,
                 'technology_id' => $technology,
             ]);
         }
+        return redirect()->route('posts.index')->with('success', 'Post cereated successfully');
     }
 
     /**
