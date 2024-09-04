@@ -21,7 +21,7 @@
   <p>work_type: <span> {{$post->work_type}}</span> </p>
   <p>location: <span> {{$post->location}}</span> </p>
   <p>benefits: <span> {{$post->benefits}}</span> </p>
-  <p>category: <span> {{$post->category->name}}</span> </p>
+  <!-- <p>category: <span> {{$post->category->name}}</span> </p> -->
   <p>application_deadline: <span> {{$post->application_deadline}}</span> </p>
   <p>min_salary: <span> {{$post->min_salary}}</span> </p>
   <p>max_salary: <span> {{$post->max_salary}}</span> </p>

@@ -27,13 +27,13 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    function category()
+    function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->hasOne(Category::class);
     }
 
     function technologies()
     {
-        return $this->hasMany(Technologies_post::class);
+        return $this->hasMany(Technology::class);
     }
 };

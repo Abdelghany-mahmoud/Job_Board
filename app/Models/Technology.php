@@ -13,6 +13,6 @@ class Technology extends Model
     ];
     function posts()
     {
-        return $this->hasMany(Technologies_post::class);
+        return $this->belongsToMany(Post::class);
     }
 }
