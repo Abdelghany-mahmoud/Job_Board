@@ -40,7 +40,7 @@ class Job_seekerController extends Controller
         return view('profile.show', compact('job_seeker'));
     }
     
-    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -70,13 +70,7 @@ class Job_seekerController extends Controller
             'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     
-        // Handling the profile picture upload
-        // if ($request->hasFile('profile_pic')) {
-        //     // Store the new profile picture
-        //     $filePath = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
-        //     $job_seeker->profile_pic = $filePath;
-        // }
-        
+ 
         if ($request->hasFile('profile_pic')) {
             // Store the new profile picture
             $filePath = $request->file('profile_pic')->store('profile_pics', 'profile_pics');

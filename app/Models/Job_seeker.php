@@ -33,4 +33,6 @@ class Job_seeker extends Model
     // {
     //     return $this->hasMany(Notification::class);
     // }
+
+   
 }

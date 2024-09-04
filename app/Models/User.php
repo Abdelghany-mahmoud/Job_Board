@@ -60,4 +60,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Job_seeker::class);
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+  
 }

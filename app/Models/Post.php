@@ -10,7 +10,30 @@ class Post extends Model
     use HasFactory;
     protected $fillable = [
         'title',
+        'user_id',
+        'category_id',
         'description',
+        'requirements',
         'responsibilities',
+        'benefits',
+        'location',
+        'work_type',
+        'min_salary',
+        'max_salary',
+        'application_deadline',
     ];
+    function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    function categories()
+    {
+        return $this->hasOne(Category::class);
+    }
+
+    function technologies()
+    {
+        return $this->hasMany(Technology::class);
+    }
 };
