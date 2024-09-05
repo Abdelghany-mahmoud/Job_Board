@@ -18,14 +18,27 @@ class PostsController extends Controller
     }
     /**
      * Display a listing of the resource.
-     */
+    //  */
+    // public function index()
+    // {
+    //     $posts = Post::all();
+    //     $Technologies_post = Technologies_post::all();
+    //     return view('posts.index', ["posts" => $posts, 'Technologies_post' => $Technologies_post]);
+    // }
     public function index()
     {
-        $posts = Post::all();
+        // Paginate posts, 5 per page
+        $posts = Post::paginate(5);
+    
+        // Get all technologies (if needed, consider if this is required per post or globally)
         $Technologies_post = Technologies_post::all();
-        return view('posts.index', ["posts" => $posts, 'Technologies_post' => $Technologies_post]);
+    
+        return view('posts.index', [
+            'posts' => $posts,
+            'Technologies_post' => $Technologies_post
+        ]);
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
