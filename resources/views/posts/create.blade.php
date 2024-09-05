@@ -71,7 +71,7 @@
       <select class="form-select mb-3" aria-label="work_type" name="work_type">
         <option selected disabled>choose work type</option>
         <option value="remote">Remote</option>
-        <option value="on-site">On-site</option>
+        <option value="on_site">On-site</option>
         <option value="hybrid">Hybrid</option>
       </select>
       @error('work_type')

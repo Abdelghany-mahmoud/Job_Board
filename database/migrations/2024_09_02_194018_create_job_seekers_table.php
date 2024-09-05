@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('job_seekers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('profile_pic');
+            $table->string('profile_pic')->nullable();
             $table->string('linkedin_profile')->nullable();
             $table->string('skills')->nullable();
             $table->string('phone')->nullable();

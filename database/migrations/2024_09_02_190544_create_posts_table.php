@@ -26,6 +26,7 @@ return new class extends Migration
             $table->date('application_deadline');
             $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->timestamps();
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
