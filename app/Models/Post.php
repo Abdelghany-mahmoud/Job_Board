@@ -27,9 +27,9 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    function categories()
+    function category()
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     function technologies()

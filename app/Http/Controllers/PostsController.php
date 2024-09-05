@@ -19,6 +19,7 @@ class PostsController extends Controller
     {
         $posts = Post::all();
         $Technologies_post = Technologies_post::all();
+        $categories = Category::all();
         return view('posts.index', ["posts" => $posts,'Technologies_post' => $Technologies_post]);
     }
 
@@ -39,8 +40,8 @@ class PostsController extends Controller
     {        
         $data = $request->validated();
         // dd($data);
-        $data['user_id']= Auth::id();
-        // $data['user_id']= 1;
+        // $data['user_id']= Auth::id();
+        $data['user_id']= 1;
         $technologies = $request->technologies;
         $post = Post::create($data);
 

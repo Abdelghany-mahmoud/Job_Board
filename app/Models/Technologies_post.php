@@ -15,10 +15,10 @@ class Technologies_post extends Model
 
     function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsTo(Post::class);
     }
-    function technologies()
+    function technology()
     {
-        return $this->hasMany(Technology::class);
+        return $this->belongsTo(Technology::class);
     }
 }
