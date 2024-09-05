@@ -79,17 +79,41 @@ class PostsController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post)
-    {
-        //
-    }
+{
+    // Get all technologies and categories for the form
+    $technologies = Technology::all();
+    $categories = Category::all();
+    
+    // Get the selected technologies for this post
+    $selectedTechnologies = $post->technologies->pluck('id')->toArray();
+    
+    return view('posts.edit', [
+        'post' => $post,
+        'technologies' => $technologies,
+        'categories' => $categories,
+        'selectedTechnologies' => $selectedTechnologies
+    ]);
+}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(StorePostRequest $request, Post $post)
     {
-        //
+        // Validate the request
+        $data = $request->validated();
+        $data['user_id'] = Auth::id(); // Make sure to assign the user_id
+    
+        // Update the post
+        $post->update($data);
+    
+        // Update the technologies associated with the post
+        $technologies = $request->technologies;
+        $post->technologies()->sync($technologies);
+    
+        return redirect()->route('posts.show')->with('success', 'Post updated successfully');
     }
+    
 
     /**
      * Remove the specified resource from storage.

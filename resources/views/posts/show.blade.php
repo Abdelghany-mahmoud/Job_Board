@@ -17,6 +17,12 @@
             @endforeach
         </ul>
 
+        <!-- Check if the authenticated user is the creator of the post -->
+@if (Auth::id() === $post->user_id)
+    <a clas="btn btn-secondary" href="{{ route('posts.edit', $post->id) }}">Edit</a>
+@endif
+
+
         <h3>Comments</h3>
         @if ($comments->isEmpty())
             <p>No comments yet.</p>

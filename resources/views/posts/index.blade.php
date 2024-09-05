@@ -25,6 +25,7 @@
   <p><span> {{$Technology_post->technology->name}} </span> </p>
   @endif
   @endforeach
+  <a class="btn btn-success"href="{{ route('posts.show', ['id' => $post->id]) }}">View Post</a>
   <hr>
   @endforeach
 </div>
