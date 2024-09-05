@@ -14,6 +14,7 @@
   <div class="p-3 text-center"> <a href="{{route('posts.create')}}" class="btn btn-success">Create new Post</a></div>
 
   @foreach($posts as $post)
+  <p>Post creator: <span>{{$post->user->name}}</span></p>
   <p>title: <span>{{$post->title}}</span></p>
   <p>Description:<span> {{$post->description}}</span> </p>
   <p>requirements: <span> {{$post->requirements}}</span> </p>

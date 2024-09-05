@@ -12,6 +12,10 @@ use App\Http\Requests\StorePostRequest;
 
 class PostsController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('auth')->only('store', 'update');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -19,7 +23,7 @@ class PostsController extends Controller
     {
         $posts = Post::all();
         $Technologies_post = Technologies_post::all();
-        return view('posts.index', ["posts" => $posts,'Technologies_post' => $Technologies_post]);
+        return view('posts.index', ["posts" => $posts, 'Technologies_post' => $Technologies_post]);
     }
 
     /**
@@ -36,9 +40,9 @@ class PostsController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StorePostRequest $request)
-    {        
+    {
         $data = $request->validated();
-        $data['user_id']= Auth::id();
+        $data['user_id'] = Auth::id();
         $technologies = $request->technologies;
         $post = Post::create($data);
 
