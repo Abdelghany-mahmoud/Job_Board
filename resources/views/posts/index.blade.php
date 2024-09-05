@@ -15,16 +15,9 @@
 
   @foreach($posts as $post)
   <p>title: <span>{{$post->title}}</span></p>
-  <p>Description:<span> {{$post->description}}</span> </p>
-  <p>requirements: <span> {{$post->requirements}}</span> </p>
-  <p>responsibilities:<span> {{$post->responsibilities}}</span> </p>
-  <p>work_type: <span> {{$post->work_type}}</span> </p>
-  <p>location: <span> {{$post->location}}</span> </p>
-  <p>benefits: <span> {{$post->benefits}}</span> </p>
-  <p>category: <span> {{$post->category->name}}</span> </p>
-  <p>application_deadline: <span> {{$post->application_deadline}}</span> </p>
-  <p>min_salary: <span> {{$post->min_salary}}</span> </p>
-  <p>max_salary: <span> {{$post->max_salary}}</span> </p>
+    <p>work_type: <span> {{$post->work_type}}</span> </p>
+    <p>application_deadline: <span> {{$post->application_deadline}}</span> </p>
+ 
   Technologies :
   @foreach($Technologies_post as $Technology_post)
   @if($post->id == $Technology_post->post_id)
@@ -35,8 +28,3 @@
   @endforeach
 </div>
 @endsection
-<style>
-  span{
-    color: red;
-  }
-</style>
