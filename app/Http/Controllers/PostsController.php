@@ -58,11 +58,23 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      */
+    // public function show(Post $post)
+    // {
+    //     //
+    // }
     public function show(Post $post)
     {
-        //
+        // Eager load comments and technologies relationships
+        $post->load('comments', 'technologies');
+    
+        // Paginate comments if necessary
+        $comments = $post->comments()->paginate(10);
+    
+        return view('posts.show', [
+            'post' => $post,
+            'comments' => $comments
+        ]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */

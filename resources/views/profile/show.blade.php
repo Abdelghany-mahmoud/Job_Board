@@ -1,7 +1,3 @@
-<!-- 
-<a href="{{ route('profile.edit', $job_seeker->id) }}">Edit Profile</a>
-<p>{{$job_seeker->id}}</p>
-<p>{{$job_seeker->location}}</p> -->
 
 @extends('layouts.app')
 
@@ -11,7 +7,6 @@
         <div class="col-md-3">
             <div class="card">
                 <img src="{{ asset('uploads/profile_pics/' .$job_seeker->profile_picture) }}" class="card-img-top img-fluid rounded-circle" alt="Profile Picture">
-                <!-- <img src="{{ asset('storage/profile_pics/' . $job_seeker->profile_pic) }}" class="card-img-top img-fluid rounded-circle" alt="Profile Picture"> -->
 
                 <div class="card-body text-center">
                     <h4 class="card-title">{{ auth()->user()->name }}</h4>

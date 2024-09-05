@@ -21,4 +21,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+    protected $policies = [
+        Comment::class => CommentPolicy::class,
+    ];
+    
 }

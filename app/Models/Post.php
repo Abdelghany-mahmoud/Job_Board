@@ -32,8 +32,17 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
-    function technologies()
+    // function technologies()
+    // {
+    //     return $this->hasMany(Technology::class);
+    // }
+    public function comments()
     {
-        return $this->hasMany(Technology::class);
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function technologies()
+    {
+        return $this->belongsToMany(Technology::class, 'technologies_posts', 'post_id', 'technology_id');
     }
 };
