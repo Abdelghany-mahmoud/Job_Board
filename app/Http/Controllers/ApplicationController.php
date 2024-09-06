@@ -36,6 +36,34 @@ use App\Models\Post;
     
             return redirect()->route('posts.show', $request->input('post_id'))->with('success', 'Application submitted successfully');
         }
+        public function showApplicationStatus()
+    {
+        $userId = Auth::id(); // Get the current authenticated user ID
+        $applications = Application::where('user_id', $userId)->with('post')->get(); // Fetch applications for the current user with related posts
+
+        return view('applications.status', compact('applications')); // Pass applications to the view
+    }
+
+    public function showApplications()
+    {
+        $userId = Auth::id(); // Get the current authenticated user ID
+        $applications = Application::where('user_id', $userId)->with('post')->paginate(10); // Fetch paginated applications
+
+        return view('applications.status', compact('applications')); // Pass paginated applications to the view
+    }
+
+    public function updateApplication(Request $request, $applicationId)
+    {
+        $request->validate([
+            'reply' => 'nullable|string',
+        ]);
+
+        $application = Application::where('user_id', Auth::id())->findOrFail($applicationId); // Ensure user owns the application
+        $application->reply = $request->input('reply');
+        $application->save();
+
+        return redirect()->route('applications.status')->with('success', 'Application updated successfully.');
+    }
     }
     
 

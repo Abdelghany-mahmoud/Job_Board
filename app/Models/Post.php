@@ -45,4 +45,8 @@ class Post extends Model
     {
         return $this->belongsToMany(Technology::class, 'technologies_posts', 'post_id', 'technology_id');
     }
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 };

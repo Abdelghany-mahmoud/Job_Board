@@ -4,8 +4,12 @@
     <div class="container">
         <h1>{{ $post->title }}</h1>
         <p>{{ $post->description }}</p>
-        <p>Posted by: {{ $post->user->name }} on {{ $post->created_at ? $post->created_at->format('M d, Y') : 'Date not available' }}</p>
-        <p>work_type: <span> {{$post->work_type}}</span> </p>
+        <p>Posted by: 
+            <a href="{{ route('profile.show', ['id' => $post->user->id]) }}">
+                {{ $post->user->name }}
+            </a> 
+            on {{ $post->created_at ? $post->created_at->format('M d, Y') : 'Date not available' }}
+        </p>        <p>work_type: <span> {{$post->work_type}}</span> </p>
         <p>application_deadline: <span> {{$post->application_deadline}}</span> </p>
         <p>min_salary: <span> {{$post->min_salary}}</span> </p>
         <p>max_salary: <span> {{$post->max_salary}}</span> </p>
@@ -29,7 +33,10 @@
         @else
             @foreach ($comments as $comment)
                 <div>
-                    <strong>{{ $comment->user->name }}</strong> commented:
+                    <strong>   <a href="{{ route('profile.show', ['id' => $comment->user->id]) }}">
+                            {{ $comment->user->name }}
+                        </a>
+                    </strong> commented:
                     <p>{{ $comment->content }}</p>
                     <p>Commented at: {{ $comment->created_at }}</p>
 

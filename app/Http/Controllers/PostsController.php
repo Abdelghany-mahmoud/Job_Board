@@ -9,6 +9,7 @@ use App\Models\Technologies_post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
+use App\Models\Application;
 
 class PostsController extends Controller
 {
@@ -134,5 +135,50 @@ class PostsController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+    // public function showPostApplications($postId)
+    // {
+    //     $post = Post::with('applications.user')->findOrFail($postId); // Fetch the post with related applications and users
+    //     return view('posts.applications', compact('post')); // Pass post to the view
+    // }
+    public function showPostApplications($postId)
+    {
+        $post = Post::where('user_id', Auth::id())->with('applications.user')->findOrFail($postId);
+        $applications = $post->applications()->paginate(10); // Paginate applications
+
+        return view('posts.applications', compact('post', 'applications'));
+    }
+
+    public function replyToApplication(Request $request, $applicationId)
+    {
+        $request->validate([
+            'reply' => 'required|string',
+        ]);
+
+        $application = Application::findOrFail($applicationId);
+        $application->reply = $request->input('reply');
+        $application->status = 'replied';
+        $application->save();
+
+        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application replied successfully.');
+    }
+    
+
+    public function approveApplication($applicationId)
+    {
+        $application = Application::findOrFail($applicationId);
+        $application->status = 'accepted';
+        $application->save();
+
+        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application approved successfully.');
+    }
+
+    public function denyApplication($applicationId)
+    {
+        $application = Application::findOrFail($applicationId);
+        $application->status = 'denied';
+        $application->save();
+
+        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application denied successfully.');
     }
 }

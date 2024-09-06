@@ -11,7 +11,7 @@
                 <div class="card-body text-center">
                     <h4 class="card-title">{{ auth()->user()->name }}</h4>
                     <p class="card-text">{{ $job_seeker->bio }}</p>
-                    <a href="{{ route('profile.edit', $job_seeker->id) }}">Edit Profile</a>
+    <a href="{{ route('profile.editJobSeeker', auth()->user()->job_seeker->id) }}">Edit Profile</a>
 
                 </div>
             </div>

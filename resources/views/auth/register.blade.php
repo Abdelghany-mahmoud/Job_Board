@@ -67,7 +67,7 @@
                 <label class="form-check-label" for="flexRadioDefault1">Admin</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="role" id="flexRadioDefault2" value="empolyer">
+                <input class="form-check-input" type="radio" name="role" id="flexRadioDefault2" value="employer">
                 <label class="form-check-label" for="flexRadioDefault2">Employer</label>
               </div>
               <div class="form-check">

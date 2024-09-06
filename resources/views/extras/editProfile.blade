@@ -1,0 +1,96 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <h1>Edit Profile</h1>
+
+    @if(auth()->user()->role == 'job_seeker')
+        <form action="{{ route('profile.updateJobSeeker', auth()->user()->jobSeeker->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('POST')
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $job_seeker->name) }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea name="bio" id="bio" class="form-control" required>{{ old('bio', $job_seeker->bio) }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="skills">Skills</label>
+                <input type="text" name="skills" id="skills" class="form-control" value="{{ old('skills', $job_seeker->skills) }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" name="phone" id="phone" class="form-control" value="{{ old('phone', $job_seeker->phone) }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" name="location" id="location" class="form-control" value="{{ old('location', $job_seeker->location) }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture</label>
+                <input type="file" name="profile_picture" id="profile_picture" class="form-control">
+                @if($job_seeker->profile_picture)
+                    <img src="{{ asset('storage/' . $job_seeker->profile_picture) }}" alt="Profile Picture" class="img-thumbnail mt-2" style="max-width: 150px;">
+                @endif
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+
+    @elseif(auth()->user()->role == 'employer')
+        <form action="{{ route('profile.updateEmployer', auth()->user()->employer->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('POST')
+
+            <div class="form-group">
+                <label for="company_name">Company Name</label>
+                <input type="text" name="company_name" id="company_name" class="form-control" value="{{ old('company_name', $employer->company_name) }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="company_website">Company Website</label>
+                <input type="text" name="company_website" id="company_website" class="form-control" value="{{ old('company_website', $employer->company_website) }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="company_logo">Company Logo</label>
+                <input type="file" name="company_logo" id="company_logo" class="form-control">
+                @if($employer->company_logo)
+                    <img src="{{ asset('storage/' . $employer->company_logo) }}" alt="Company Logo" class="img-thumbnail mt-2" style="max-width: 150px;">
+                @endif
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+
+    @elseif(auth()->user()->role == 'admin')
+        <form action="{{ route('profile.updateAdmin', auth()->user()->admin->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('POST')
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $admin->name) }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture</label>
+                <input type="file" name="profile_picture" id="profile_picture" class="form-control">
+                @if($admin->profile_picture)
+                    <img src="{{ asset('storage/' . $admin->profile_picture) }}" alt="Profile Picture" class="img-thumbnail mt-2" style="max-width: 150px;">
+                @endif
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    @endif
+</div>
+@endsection
