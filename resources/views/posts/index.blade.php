@@ -13,9 +13,11 @@
 @endif
 
 <div class="container col-6">
+  @if(Auth::user() && Auth::user()->role === "empolyer")
   <div class="p-3 text-center">
     <a href="{{ route('posts.create') }}" class="btn btn-success">Create new Post</a>
   </div>
+  @endif
 
   @foreach($posts as $post)
   <p>Post creator: <span>{{ $post->user->name }}</span></p>
@@ -29,8 +31,31 @@
     <p><span>{{ $Technology_post->technology->name }}</span></p>
     @endif
   @endforeach
-
-  <a class="btn btn-success" href="{{ route('posts.show', ['id' => $post->id]) }}">View Post</a>
+  <a class="btn btn-success" href="{{ route('posts.show',$post) }}">View Post</a>
+  @can("delete",$post)
+      <form action="{{route('posts.destroy', $post)}}" method="POST" style="display: inline-block;">
+        <input class='btn btn-danger' type="button" value="Delete" data-bs-toggle="modal" data-bs-target="#{{$post['id']}}">
+        <div class="modal fade" id="{{$post['id']}}" tabindex="-1" aria-labelledby="{{$post['id']}}Label" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Delete of {{$post['title']}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete this post !
+              </div>
+              <div class="modal-footer">
+                @csrf
+                @method('delete')
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      @endcan
   <hr>
   @endforeach
 
