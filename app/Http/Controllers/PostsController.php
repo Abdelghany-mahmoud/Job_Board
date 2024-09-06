@@ -12,19 +12,38 @@ use App\Http\Requests\StorePostRequest;
 
 class PostsController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
         $this->middleware('auth')->only('store', 'update');
     }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
-        $Technologies_post = Technologies_post::all();
-        return view('posts.index', ["posts" => $posts, 'Technologies_post' => $Technologies_post]);
+        // Retrieve the search query from the request
+        $search = $request->input('search');
+    
+        // If there's a search query, filter posts by the search criteria
+        if ($search) {
+            $posts = Post::where('title', 'like', '%' . $search . '%')
+                ->orWhere('location', 'like', '%' . $search . '%')
+                ->orWhere('work_type', 'like', '%' . $search . '%')
+                ->orderBy('created_at', 'desc') // Sort by latest created post
+                ->get();
+        } else {
+            // If no search query, return all posts ordered by latest created
+            $posts = Post::orderBy('created_at', 'desc')->get();
+        }
+    
+        // Include the Technologies relation to avoid N+1 problem
+        $Technologies_post = Technologies_post::with('technology')->get();
+    
+        // Pass the posts and the search query to the view
+        return view('posts.index', compact('posts', 'Technologies_post', 'search'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -52,16 +71,12 @@ class PostsController extends Controller
                 'technology_id' => $technology,
             ]);
         }
-        return redirect()->route('posts.index')->with('success', 'Post cereated successfully');
+        return redirect()->route('posts.index')->with('success', 'Post created successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    // public function show(Post $post)
-    // {
-    //     //
-    // }
     public function show(Post $post)
     {
         // Eager load comments and technologies relationships
@@ -75,12 +90,13 @@ class PostsController extends Controller
             'comments' => $comments
         ]);
     }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post)
     {
-        //
+        // Your edit logic
     }
 
     /**
@@ -88,7 +104,7 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        // Your update logic
     }
 
     /**
@@ -96,6 +112,6 @@ class PostsController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        // Your delete logic
     }
 }
