@@ -15,9 +15,6 @@ use App\Http\Controllers\ApplicationController;
 Auth::routes();
 Route::get('/', function (){return redirect()->route('posts.index');});
 Route::resource('posts', PostsController::class);
-Route::get('/posts/{id}', [PostsController::class, 'show'])->name('posts.show');
-Route::get('/posts/{post}/edit', [PostsController::class, 'edit'])->name('posts.edit');
-Route::put('/posts/{post}', [PostsController::class, 'update'])->name('posts.update');
 
 // Route::get('/user/{id}', [UserController::class, 'show'])->name('users.show');
 

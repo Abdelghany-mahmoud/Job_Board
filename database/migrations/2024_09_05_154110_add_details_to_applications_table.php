@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::table('applications', function (Blueprint $table) {
-        $table->text('content')->nullable();
-        $table->decimal('expected_salary', 10, 2)->nullable();
-    });
-}
+        Schema::table('applications', function (Blueprint $table) {
+            $table->text('content')->nullable();
+            $table->decimal('expected_salary', 10, 2)->nullable();
+        });
+    }
 
-public function down()
-{
-    Schema::table('applications', function (Blueprint $table) {
-        $table->dropColumn(['content', 'expected_salary']);
-    });
+    public function down()
+    {
+        Schema::table('applications', function (Blueprint $table) {
+            $table->dropColumn(['content', 'expected_salary']);
+        });
     }
 };
