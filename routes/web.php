@@ -16,12 +16,12 @@ Auth::routes();
 Route::get('/', function (){return redirect()->route('posts.index');});
 Route::resource('posts', PostsController::class);
 
-// Route::get('/user/{id}', [UserController::class, 'show'])->name('users.show');
+// Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
-// Route::get('/profile/{id}', [Job_seekerController::class, 'show'])->name('profile.show');
-// Route::post('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
-// Route::get('/profile/edit/{id}', [Job_seekerController::class, 'edit'])->name('profile.edit');
-// Route::put('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
+Route::get('/profile/{id}', [Job_seekerController::class, 'show'])->name('profile.show');
+Route::post('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
+Route::get('/profile/edit/{id}', [Job_seekerController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
 
 
 
@@ -29,8 +29,6 @@ Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name
 Route::get('comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
 Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-
-
 
 Route::get('applications/create/{post}', [ApplicationController::class, 'create'])->name('applications.create');
 Route::post('applications', [ApplicationController::class, 'store'])->name('applications.store');

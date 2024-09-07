@@ -1,20 +1,58 @@
 @extends('layouts.app')
+<style>
+    .login-form {
+        width: 500px;
+        margin: auto;
+        margin-top: 40px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        padding: 20px;
+        border-radius: 5px;
+    }
 
+    .login-form .login-input {
+        padding: 10px;
+    }
+    
+    .login-form .login-input label {
+        padding: 10px;
+    }  
+    
+    .sign-up-with-google {
+    background: #4285F4;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    width: 450px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sign-up-with-google img {
+    border-radius: 5px;
+    margin-right: 5px;
+  }
+    
+</style>
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+        <div class="">
+            <div class="login-form">
+                <h4 style="text-align: center; margin-bottom: 20px;">Welcome Back</h4>
+        <div style="margin-left: 10px;" class="sign-up-with-google">
+            <img width="30" src="{{ asset('logos/google.png') }}" alt="">
+            <span>Sign In with Google</span>
+        </div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                        <div class="login-input">
+                            <label for="email" class="">{{ __('Email') }}</label>
 
-                            <div class="col-md-6">
+                            <div class="">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
@@ -25,10 +63,10 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                        <div class="login-input">
+                            <label for="password" class="">{{ __('Password') }}</label>
 
-                            <div class="col-md-6">
+                            <div class="">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                                 @error('password')
@@ -39,8 +77,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
+                        <div class="login-input">
+                            <div class="">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
@@ -51,8 +89,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
+                        <div class="login-input">
+                            <div class="">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>

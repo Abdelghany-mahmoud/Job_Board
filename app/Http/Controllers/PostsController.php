@@ -13,32 +13,38 @@ use App\Models\Application;
 
 class PostsController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
         $this->middleware('auth')->only('store', 'update');
     }
+
     /**
      * Display a listing of the resource.
-    //  */
-    // public function index()
-    // {
-    //     $posts = Post::all();
-    //     $Technologies_post = Technologies_post::all();
-    //     return view('posts.index', ["posts" => $posts, 'Technologies_post' => $Technologies_post]);
-    // }
-    public function index()
+     */
+    public function index(Request $request)
     {
-        // Paginate posts, 5 per page
-        $posts = Post::paginate(1);
-
-        // Get all technologies (if needed, consider if this is required per post or globally)
-        $Technologies_post = Technologies_post::all();
-
-        return view('posts.index', [
-            'posts' => $posts,
-            'Technologies_post' => $Technologies_post
-        ]);
+        // Retrieve the search query from the request
+        $search = $request->input('search');
+    
+        // If there's a search query, filter posts by the search criteria
+        if ($search) {
+            $posts = Post::where('title', 'like', '%' . $search . '%')
+                ->orWhere('location', 'like', '%' . $search . '%')
+                ->orWhere('work_type', 'like', '%' . $search . '%')
+                ->orderBy('created_at', 'desc') // Sort by latest created post
+                ->get();
+        } else {
+            // If no search query, return all posts ordered by latest created
+            $posts = Post::orderBy('created_at', 'desc')->get();
+        }
+    
+        // Include the Technologies relation to avoid N+1 problem
+        $Technologies_post = Technologies_post::with('technology')->get();
+    
+        // Pass the posts and the search query to the view
+        return view('posts.index', compact('posts', 'Technologies_post', 'search'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -66,16 +72,12 @@ class PostsController extends Controller
                 'technology_id' => $technology,
             ]);
         }
-        return redirect()->route('posts.index')->with('success', 'Post cereated successfully');
+        return redirect()->route('posts.index')->with('success', 'Post created successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    // public function show(Post $post)
-    // {
-    //     //
-    // }
     public function show(Post $post)
     {
         // Eager load comments and technologies relationships
@@ -89,24 +91,13 @@ class PostsController extends Controller
             'comments' => $comments
         ]);
     }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post)
     {
-        // Get all technologies and categories for the form
-        $technologies = Technology::all();
-        $categories = Category::all();
-
-        // Get the selected technologies for this post
-        $selectedTechnologies = $post->technologies->pluck('id')->toArray();
-
-        return view('posts.edit', [
-            'post' => $post,
-            'technologies' => $technologies,
-            'categories' => $categories,
-            'selectedTechnologies' => $selectedTechnologies
-        ]);
+        // Your edit logic
     }
 
     /**
@@ -114,18 +105,7 @@ class PostsController extends Controller
      */
     public function update(StorePostRequest $request, Post $post)
     {
-        // Validate the request
-        $data = $request->validated();
-        $data['user_id'] = Auth::id(); // Make sure to assign the user_id
-
-        // Update the post
-        $post->update($data);
-
-        // Update the technologies associated with the post
-        $technologies = $request->technologies;
-        $post->technologies()->sync($technologies);
-
-        return redirect()->route('posts.show')->with('success', 'Post updated successfully');
+        // Your update logic
     }
 
 
@@ -134,52 +114,6 @@ class PostsController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
-        return  redirect()->route('posts.index')->with('success', 'Post deleted successfully');
-    }
-    // public function showPostApplications($postId)
-    // {
-    //     $post = Post::with('applications.user')->findOrFail($postId); // Fetch the post with related applications and users
-    //     return view('posts.applications', compact('post')); // Pass post to the view
-    // }
-    public function showPostApplications($postId)
-    {
-        $post = Post::where('user_id', Auth::id())->with('applications.user')->findOrFail($postId);
-        $applications = $post->applications()->paginate(10); // Paginate applications
-
-        return view('posts.applications', compact('post', 'applications'));
-    }
-
-    public function replyToApplication(Request $request, $applicationId)
-    {
-        $request->validate([
-            'reply' => 'required|string',
-        ]);
-
-        $application = Application::findOrFail($applicationId);
-        $application->reply = $request->input('reply');
-        $application->status = 'replied';
-        $application->save();
-
-        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application replied successfully.');
-    }
-    
-
-    public function approveApplication($applicationId)
-    {
-        $application = Application::findOrFail($applicationId);
-        $application->status = 'accepted';
-        $application->save();
-
-        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application approved successfully.');
-    }
-
-    public function denyApplication($applicationId)
-    {
-        $application = Application::findOrFail($applicationId);
-        $application->status = 'denied';
-        $application->save();
-
-        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application denied successfully.');
+        // Your delete logic
     }
 }

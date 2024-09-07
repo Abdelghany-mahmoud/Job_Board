@@ -17,6 +17,25 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <!-- Custom CSS for Centering Navbar Links -->
+    <style>
+        .navbar-nav {
+            margin: 0 auto;
+        }
+        .navbar-nav-center {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+            font-size: 16px;
+        }
+        .navbar-nav-center a {
+            margin-left: 15px;
+            font-weight: bold;
+            color: #717070;
+        }
+    
+    </style>
 </head>
 
 <body>
@@ -24,20 +43,41 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/posts') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <img src="{{ asset('logos/logo.png') }}" width="120" alt="{{ config('app.name', 'Laravel') }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
+                    <!-- Centered Links -->
+                    <div class="navbar-nav-center">
+                        <ul class="navbar-nav">
+                            <!-- Home Link -->
+                            <li class="nav-item">
+                                <a class="nav-link menu" href="{{ route('posts.index') }}">{{ __('Home') }}</a>
+                            </li>
+                            <!-- Jobs Link -->
+                            <li class="nav-item">
+                                <a class="nav-link menu" href="{{ route('posts.index') }}">{{ __('Jobs') }}</a>
+                            </li>
+                            <!-- Notifications Link -->
+                            <li class="nav-item">
+                                <a class="nav-link menu" href="#">{{ __('Notifications') }}</a>
+                            </li>
+                            <!-- Messaging Link -->
+                            <li class="nav-item">
+                                <a class="nav-link menu" href="#">{{ __('Messaging') }}</a>
+                            </li>
+                           
+                        </ul>
+                    </div>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                            <li style="margin-right: 50px;" class="nav-item">
+                                <a style="background-color: #4285F4; color: #fff; padding: 8px 20px; border-radius: 5px; font-weight: 500; " class="nav-link" href="{{ route('posts.create') }}">{{ __('Post Job') }}</a>
+                            </li>
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -57,7 +97,12 @@
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-end"  aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">{{ __('Profile') }}</a>
+                                    <a class="dropdown-item" href="#">{{ __('Settings') }}</a>
+                                    <a class="dropdown-item" href="#">{{ __('Help') }}</a>
+                                    <a class="dropdown-item" href="#">{{ __('Edit Profile') }}</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

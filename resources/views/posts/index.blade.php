@@ -1,65 +1,249 @@
 @extends('layouts.app')
 
 @section('content')
-@if(session('success'))
-<div class="alert alert-primary d-flex align-items-center mt-3" role="alert">
-  <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-  </svg>
-  <div>
-    {{ session('success') }}
-  </div>
-</div>
-@endif
 
-<div class="container col-6">
-  @if(Auth::user() && Auth::user()->role === "empolyer")
-  <div class="p-3 text-center">
-    <a href="{{ route('posts.create') }}" class="btn btn-success">Create new Post</a>
-  </div>
-  @endif
+<style>
+  
+    /* .color-gray {
+            background-color: #f1f1f1;
+        }
+    
+        .color-blue {
+            background-color: #D7E9FB;
+        }
 
-  @foreach($posts as $post)
-  <p>Post creator: <span>{{ $post->user->name }}</span></p>
-  <p>Title: <span>{{ $post->title }}</span></p>
-  <p>Work Type: <span>{{ $post->work_type }}</span></p>
-  <p>Application Deadline: <span>{{ $post->application_deadline }}</span></p>
+        .color-green {
+            background-color: #d3ffd3;
+        } */
 
-  Technologies:
-  @foreach($Technologies_post as $Technology_post)
-    @if($post->id == $Technology_post->post_id)
-    <p><span>{{ $Technology_post->technology->name }}</span></p>
-    @endif
-  @endforeach
-  <a class="btn btn-success" href="{{ route('posts.show',$post) }}">View Post</a>
-  @can("delete",$post)
-      <form action="{{route('posts.destroy', $post)}}" method="POST" style="display: inline-block;">
-        <input class='btn btn-danger' type="button" value="Delete" data-bs-toggle="modal" data-bs-target="#{{$post['id']}}">
-        <div class="modal fade" id="{{$post['id']}}" tabindex="-1" aria-labelledby="{{$post['id']}}Label" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Delete of {{$post['title']}}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                Are you sure you want to delete this post !
-              </div>
-              <div class="modal-footer">
-                @csrf
-                @method('delete')
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Confirm</button>
-              </div>
-            </div>
-          </div>
+    .hero {
+        background-image: url('{{ asset('images/background.jpeg') }}');
+        background-size: cover;
+        width: 100%;
+        height: 400px;
+        position: relative;
+        top: -25px;
+
+    }
+
+    .hero:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgb(0, 0, 0, .7);
+        z-index: 1;
+
+    }
+
+    .container {
+        position: relative;
+        z-index: 10;
+    }
+
+    .hero-div {
+        top: 50px;
+    }
+
+    .hero-div h1 {
+        color: #fff;
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .hero-div p {
+        color: #fff;
+        font-size: 1.4rem;
+        margin-bottom: 90px;
+    }
+
+    .search-input {
+        background: #fff;
+        border: 1px solid #fff;
+        border-radius: 5px;
+        padding: 15px;
+        width: 600px;
+        outline: none;
+        color: #000;
+        margin: auto;
+
+    }
+
+    .search-btn {
+        background: #0A66C2;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        padding: 11px 15px;
+        color: #fff;
+        position: absolute;
+        top: 5px;
+        left: 750px;
+    }
+
+    .job-post {
+        padding: 20px;
+        margin-bottom: 10px;
+        background: #fff;
+        border: 1px solid #C6CDD0;
+        transition: all .3s ease;
+
+    }
+
+    .job-post:hover {
+        background: #f1f1f1;
+    }
+
+    .job-logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        border-radius: 50%;
+    }
+
+    .company-name {
+        
+        font-size: 1rem;
+    }
+
+    .tags {
+        list-style: none;
+        padding: 0;
+        margin-top: 10px;
+    }
+
+    .tags li {
+        display: inline-block;
+        background: #f1f1f1;
+        color: black;
+        padding: 5px 10px;
+        border-radius: 4px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    .heading {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .heading .tag {
+        margin: 5px;
+    }
+
+    .heading span {
+        border: 1px solid  #cd9837;;
+        padding: 5px;
+        cursor: pointer;
+        transition: all .3s ease;
+       
+    }
+
+    .heading span:hover {
+        background: #cd9837;
+        color: #fff;
+    }
+
+    .bar {
+        background: #cd9837;
+        padding: 10px;
+        margin-top: -30px;
+    }
+
+</style>
+
+ <!-- Hero Section -->
+<section class="bg-gray-100 py-20 hero">
+    <div style="" class="container hero-div mx-auto text-center">
+        <h1  class="text-5xl font-bold text-gray-800 mb-6">Discover the best jobs tailored to your skills</h1>
+        <p class="text-gray-600 mb-8">Browse through thousands of job listings and apply today!</p>
+
+        <!-- Search Form -->
+        <form style="z-index: 99; position: relative;" action="{{ route('posts.index') }}" method="GET" class="search-form flex justify-center mb-8">
+            <input style="z-index: 99;"
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search jobs by title, company, location, or tags..."
+                class="form-control search-input"
+            />
+            <button style="z-index: 99;" type="submit" class="search-btn">
+                Search Jobs
+            </button>
+        </form>
+    </div>
+</section>
+
+<div class="bar"></div>
+<div style="width: 90%;" class="container col-6">
+        <div class="heading">
+            <h2>Job Listings</h2>
+           <div style="margin-top: 20px;">
+           <span>Programming</span>
+            <span class="tag">Design</span>
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Finance</span>
+            <span class="tag">Data Science</span>
+            <span class="tag">Marketting</span>
+            <span class="tag">Engineering</span>
+            <span class="tag">Sales</span>
+           </div>
         </div>
-      </form>
-      @endcan
-  <hr>
-  @endforeach
 
-  <!-- Pagination Links -->
-  {{ $posts->links() }}
+    @foreach($posts as $post)
+        @php
+           
+
+            $companyLogos = ['1.jpeg', '2.jpeg', '3.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg'];
+            $companyNames = ['Tech Corp', 'Innovate Solutions', 'Global Soft', 'Bright Future Inc'];
+            $randomLogo = $companyLogos[array_rand($companyLogos)];
+            $randomCompanyName = $companyNames[array_rand($companyNames)];
+
+            $tags = ['Programming', 'Design', 'Marketing', 'Engineering', 'Machine Learning', 'Data Science', 'Finance', 'Sales', 'HR'];
+            // Pick a random number of tags (between 1 and 4)
+            $randomTags = array_rand(array_flip($tags), rand(1, 2));
+            if (!is_array($randomTags)) {
+                $randomTags = [$randomTags];  
+            }
+        @endphp
+   
+    
+        <div style="display: flex; justify-content: space-between; cursor: pointer;" class="job-post">  
+            <!-- Company Logo and Name -->
+            <div>
+            <div class="d-flex align-items-center mb-3">
+                <img src="{{ asset('logos/' . $randomLogo) }}" alt="Company Logo" class="job-logo">
+                <span style="font-size: 1.2rem; color: #0046B2;">{{ $post->title }}</span>
+            </div>
+            <span class="company-name">{{ $randomCompanyName }} - </span>
+
+            <span>{{ $post->location }}</span>
+           <p> <span style="color:#709466;">{{ $post->created_at->diffForHumans() }}</span></p>
+            <p style="margin-top: 10px;">Application Deadline: {{ \Carbon\Carbon::parse($post->application_deadline)->format('M d, Y') }}</p>
+
+            <span >Technologies Needed:</span>
+            @foreach($Technologies_post as $Technology_post)
+            @if($post->id == $Technology_post->post_id)
+            <span style="background: #f1f1f1; padding: 4px 6px; border-radius: 5px;">{{ $Technology_post->technology->name }}</span>
+            @endif
+            @endforeach
+            
+            <p style="margin-top: 10px; " ><span style="background-color: #EBEDF0; padding: 4px; 6px; border-radius: 5px;">{{ $post->work_type }}</span></p>
+            <!-- <p>Posted by: <span>{{ $post->user->name }}</span></p> -->
+
+            </div>
+            <div>
+                <!-- Display Tags -->
+                <ul class="tags">
+                    @foreach($randomTags as $tag)
+                        <li >{{ $tag }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        
+        </div>
+    @endforeach
 </div>
 @endsection
