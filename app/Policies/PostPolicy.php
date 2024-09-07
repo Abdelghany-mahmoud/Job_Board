@@ -30,15 +30,16 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Post $post): bool
+    public function update(User $user, Post $post)
     {
-        Auth::user()->id === $post->user->id;
+        // Allow the employer who created the post to manage it
+        return $user->id === $post->user_id;
     }
 
     /**

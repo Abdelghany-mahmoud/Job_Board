@@ -57,7 +57,12 @@ class UserController extends Controller
     {
         //
     }
-
+    // public function show($id)
+    // {
+    //     $user = User::findOrFail($id);
+    //     return view('users.show', compact('user'));
+    // }
+    
     /**
      * Show the form for editing the specified resource.
      */
