@@ -3,7 +3,6 @@
 @section('content')
 
 <style>
-  
     /* .color-gray {
             background-color: #f1f1f1;
         }
@@ -17,7 +16,7 @@
         } */
 
     .hero {
-        background-image: url('{{ asset('images/background.jpeg') }}');
+        background-image: url('{{ asset ("images/background.jpeg") }}');
         background-size: cover;
         width: 100%;
         height: 400px;
@@ -104,7 +103,7 @@
     }
 
     .company-name {
-        
+
         font-size: 1rem;
     }
 
@@ -134,11 +133,12 @@
     }
 
     .heading span {
-        border: 1px solid  #cd9837;;
+        border: 1px solid #cd9837;
+        ;
         padding: 5px;
         cursor: pointer;
         transition: all .3s ease;
-       
+
     }
 
     .heading span:hover {
@@ -151,13 +151,12 @@
         padding: 10px;
         margin-top: -30px;
     }
-
 </style>
 
- <!-- Hero Section -->
+<!-- Hero Section -->
 <section class="bg-gray-100 py-20 hero">
-    <div style="" class="container hero-div mx-auto text-center">
-        <h1  class="text-5xl font-bold text-gray-800 mb-6">Discover the best jobs tailored to your skills</h1>
+    <div class="container hero-div mx-auto text-center">
+        <h1 class="text-5xl font-bold text-gray-800 mb-6">Discover the best jobs tailored to your skills</h1>
         <p class="text-gray-600 mb-8">Browse through thousands of job listings and apply today!</p>
 
         <!-- Search Form -->
@@ -167,8 +166,7 @@
                 name="search"
                 value="{{ request('search') }}"
                 placeholder="Search jobs by title, company, location, or tags..."
-                class="form-control search-input"
-            />
+                class="form-control search-input" />
             <button style="z-index: 99;" type="submit" class="search-btn">
                 Search Jobs
             </button>
@@ -178,10 +176,10 @@
 
 <div class="bar"></div>
 <div style="width: 90%;" class="container col-6">
-        <div class="heading">
-            <h2>Job Listings</h2>
-           <div style="margin-top: 20px;">
-           <span>Programming</span>
+    <div class="heading">
+        <h2>Job Listings</h2>
+        <div style="margin-top: 20px;">
+            <span>Programming</span>
             <span class="tag">Design</span>
             <span class="tag">Machine Learning</span>
             <span class="tag">Finance</span>
@@ -189,30 +187,30 @@
             <span class="tag">Marketting</span>
             <span class="tag">Engineering</span>
             <span class="tag">Sales</span>
-           </div>
         </div>
+    </div>
 
     @foreach($posts as $post)
-        @php
-           
+    @php
 
-            $companyLogos = ['1.jpeg', '2.jpeg', '3.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg'];
-            $companyNames = ['Tech Corp', 'Innovate Solutions', 'Global Soft', 'Bright Future Inc'];
-            $randomLogo = $companyLogos[array_rand($companyLogos)];
-            $randomCompanyName = $companyNames[array_rand($companyNames)];
 
-            $tags = ['Programming', 'Design', 'Marketing', 'Engineering', 'Machine Learning', 'Data Science', 'Finance', 'Sales', 'HR'];
-            // Pick a random number of tags (between 1 and 4)
-            $randomTags = array_rand(array_flip($tags), rand(1, 2));
-            if (!is_array($randomTags)) {
-                $randomTags = [$randomTags];  
-            }
-        @endphp
-   
-    
-        <div style="display: flex; justify-content: space-between; cursor: pointer;" class="job-post">  
-            <!-- Company Logo and Name -->
-            <div>
+    $companyLogos = ['1.jpeg', '2.jpeg', '3.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg'];
+    $companyNames = ['Tech Corp', 'Innovate Solutions', 'Global Soft', 'Bright Future Inc'];
+    $randomLogo = $companyLogos[array_rand($companyLogos)];
+    $randomCompanyName = $companyNames[array_rand($companyNames)];
+
+    $tags = ['Programming', 'Design', 'Marketing', 'Engineering', 'Machine Learning', 'Data Science', 'Finance', 'Sales', 'HR'];
+    // Pick a random number of tags (between 1 and 4)
+    $randomTags = array_rand(array_flip($tags), rand(1, 2));
+    if (!is_array($randomTags)) {
+    $randomTags = [$randomTags];
+    }
+    @endphp
+
+
+    <div style="display: flex; justify-content: space-between; cursor: pointer;" class="job-post">
+        <!-- Company Logo and Name -->
+        <div>
             <div class="d-flex align-items-center mb-3">
                 <img src="{{ asset('logos/' . $randomLogo) }}" alt="Company Logo" class="job-logo">
                 <span style="font-size: 1.2rem; color: #0046B2;">{{ $post->title }}</span>
@@ -220,30 +218,30 @@
             <span class="company-name">{{ $randomCompanyName }} - </span>
 
             <span>{{ $post->location }}</span>
-           <p> <span style="color:#709466;">{{ $post->created_at->diffForHumans() }}</span></p>
+            <p> <span style="color:#709466;">{{ $post->created_at->diffForHumans() }}</span></p>
             <p style="margin-top: 10px;">Application Deadline: {{ \Carbon\Carbon::parse($post->application_deadline)->format('M d, Y') }}</p>
 
-            <span >Technologies Needed:</span>
+            <span>Technologies Needed:</span>
             @foreach($Technologies_post as $Technology_post)
             @if($post->id == $Technology_post->post_id)
             <span style="background: #f1f1f1; padding: 4px 6px; border-radius: 5px;">{{ $Technology_post->technology->name }}</span>
             @endif
             @endforeach
-            
-            <p style="margin-top: 10px; " ><span style="background-color: #EBEDF0; padding: 4px; 6px; border-radius: 5px;">{{ $post->work_type }}</span></p>
+
+            <p style="margin-top: 10px;"> <span style="background-color: #EBEDF0; padding: 4px 6px; border-radius: 5px;">{{ $post->work_type }}</span></p>
             <!-- <p>Posted by: <span>{{ $post->user->name }}</span></p> -->
 
-            </div>
-            <div>
-                <!-- Display Tags -->
-                <ul class="tags">
-                    @foreach($randomTags as $tag)
-                        <li >{{ $tag }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        
         </div>
+        <div>
+            <!-- Display Tags -->
+            <ul class="tags">
+                @foreach($randomTags as $tag)
+                <li>{{ $tag }}</li>
+                @endforeach
+            </ul>
+        </div>
+
+    </div>
     @endforeach
 </div>
 @endsection

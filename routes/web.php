@@ -13,10 +13,10 @@ use App\Http\Controllers\ApplicationController;
 
 
 Auth::routes();
-Route::get('/', function (){return redirect()->route('posts.index');});
+Route::get('/', function () {
+    return redirect()->route('posts.index');
+});
 Route::resource('posts', PostsController::class);
-
-// Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
 Route::get('/profile/{id}', [Job_seekerController::class, 'show'])->name('profile.show');
 Route::post('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
@@ -39,7 +39,7 @@ use App\Http\Controllers\ProfileController;
 Route::middleware(['auth'])->group(function () {
     // Edit profile for job_seeker
 
-Route::get('/profile', [ProfileController::class, 'showProfile'])->middleware('auth')->name('profile.show');
+    Route::get('/profile', [ProfileController::class, 'showProfile'])->middleware('auth')->name('profile.show');
 
     Route::get('/profile/{job_seeker}/edit', [ProfileController::class, 'editJobSeeker'])->name('profile.editJobSeeker');
     Route::post('/profile/{job_seeker}/update', [ProfileController::class, 'updateJobSeeker'])->name('profile.updateJobSeeker');
