@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function store(Request $request, $postId)
+    public function store(Request $request, $post)
     {
         $request->validate([
             'content' => 'required|string|max:255',
@@ -17,25 +17,25 @@ class CommentController extends Controller
         $comment->content = $request->input('content');
         $comment->user_id = Auth::id();
         $comment->commentable_type = 'App\Models\Post';
-        $comment->commentable_id = $postId;
+        $comment->commentable_id = $post;
         $comment->save();
 
-        return redirect()->route('posts.show', $postId)->with('success', 'Comment added successfully');
+        return redirect()->route('posts.show', $post)->with('success', 'Comment added successfully');
     }
-    public function edit($id)
+    public function edit($post)
     {
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::findOrFail($post);
     
         return view('comments.edit', compact('comment'));
     }
     
-    public function update(Request $request, $id)
+    public function update(Request $request, $post)
     {
         $request->validate([
             'content' => 'required|string|max:255',
         ]);
     
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::findOrFail($post);
         $comment->content = $request->input('content');
         $comment->save();
     
@@ -43,9 +43,9 @@ class CommentController extends Controller
     }
     
 
-    public function destroy($id)
+    public function destroy($post)
     {
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::findOrFail($post);
         $comment->delete();
 
         return redirect()->route('posts.show', $comment->commentable_id)->with('success', 'Comment deleted successfully');

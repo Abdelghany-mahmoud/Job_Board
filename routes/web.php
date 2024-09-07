@@ -11,24 +11,23 @@ use App\Http\Controllers\ApplicationController;
 // use App\Http\Controllers\UserController;
 
 
-
 Auth::routes();
+
 Route::get('/', function () {
     return redirect()->route('posts.index');
 });
 Route::resource('posts', PostsController::class);
 
-Route::get('/profile/{id}', [Job_seekerController::class, 'show'])->name('profile.show');
-Route::post('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
-Route::get('/profile/edit/{id}', [Job_seekerController::class, 'edit'])->name('profile.edit');
-Route::put('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
+// Route::get('/profile/{id}', [Job_seekerController::class, 'show'])->name('profile.show');
+// Route::post('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
+// Route::get('/profile/edit/{id}', [Job_seekerController::class, 'edit'])->name('profile.edit');
+// Route::put('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
 
 
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('newComment.store');
 
-Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
-Route::get('comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
-Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::resource('comments', CommentController::class);
+
 
 Route::get('applications/create/{post}', [ApplicationController::class, 'create'])->name('applications.create');
 Route::post('applications', [ApplicationController::class, 'store'])->name('applications.store');
@@ -53,15 +52,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/{admin}/update', [ProfileController::class, 'updateAdmin'])->name('profile.updateAdmin');
 });
 
-// Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
 
-//     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
-//     // Route::get('/profile/edit', [ProfileController::class, 'editProfile'])->name('profile.edit');
+    // Route::get('/profile/edit', [ProfileController::class, 'editProfile'])->name('profile.edit');
 
-//     // Route to handle profile updates
-//     // Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
-// });
+    // Route to handle profile updates
+    // Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+});
 
 use App\Http\Controllers\PostManagementController;
 use App\Http\Controllers\ApplicationManagementController;

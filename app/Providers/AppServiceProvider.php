@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Post;
@@ -37,8 +38,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected $policies = [
         Comment::class => CommentPolicy::class,
-            Post::class => PostPolicy::class,
-        
+        Post::class => PostPolicy::class,
+
     ];
-    
 }

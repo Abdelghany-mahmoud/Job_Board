@@ -114,6 +114,7 @@ class PostsController extends Controller
      */
     public function destroy(Post $post)
     {
-        // Your delete logic
+        $post->delete();
+        return redirect()->route('posts.index')->with('success', 'Post Deleted successfully');
     }
 }

@@ -56,7 +56,7 @@
         @endif
 
         @auth
-            <form action="{{ route('comments.store', $post->id) }}" method="POST">
+            <form action="{{ route('newComment.store', $post) }}" method="POST">
                 @csrf
                 <textarea name="content" required></textarea>
                 <button class="btn btn-primary" type="submit">Add Comment</button>
