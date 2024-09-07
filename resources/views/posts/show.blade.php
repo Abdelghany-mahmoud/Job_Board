@@ -28,32 +28,42 @@
 
 
         <h3>Comments</h3>
-        @if ($comments->isEmpty())
-            <p>No comments yet.</p>
-        @else
-            @foreach ($comments as $comment)
-                <div>
-                    <strong>   <a href="{{ route('profile.show', ['id' => $comment->user->id]) }}">
-                            {{ $comment->user->name }}
-                        </a>
-                    </strong> commented:
-                    <p>{{ $comment->content }}</p>
-                    <p>Commented at: {{ $comment->created_at }}</p>
+     @if ($comments->isEmpty())
+    <p>No comments yet.</p>
+@else
+    @foreach ($comments as $comment)
+        {{-- Show the comment only if it's visible to others or the user is the comment owner --}}
+        @if ($comment->visible_to_others || auth()->id() === $comment->user_id)
+            <div>
+                {{-- Display the commenter's profile link --}}
+                <strong>
+                    <a href="{{ route('profile.show', ['id' => $comment->user->id]) }}">
+                        {{ $comment->user->name }}
+                    </a>
+                </strong> commented:
+                
+                {{-- Display the comment content --}}
+                <p>{{ $comment->content }}</p>
+                <p>Commented at: {{ $comment->created_at }}</p>
 
-                    @if (auth()->id() === $comment->user_id)
-                        <a class="btn btn-primary" href="{{ route('comments.edit', $comment->id) }}">Edit</a>
+                {{-- If the logged-in user is the comment owner, allow editing and deleting --}}
+                @if (auth()->id() === $comment->user_id)
+                    <a class="btn btn-primary" href="{{ route('comments.edit', $comment->id) }}">Edit</a>
 
-                        <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-primary" type="submit" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
-                        </form>
-                    @endif
-                </div>
-            @endforeach
-
-            {{ $comments->links() }}
+                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-primary" type="submit" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                    </form>
+                @endif
+            </div>
         @endif
+    @endforeach
+    {{ $comments->links() }}
+
+@endif
+
+    
 
         @auth
             <form action="{{ route('newComment.store', $post) }}" method="POST">
@@ -61,8 +71,14 @@
                 <textarea name="content" required></textarea>
                 <button class="btn btn-primary" type="submit">Add Comment</button>
             </form>
+            @if(auth()->user()->role === 'employer')
+            <div class="alert alert-warning">
+                Employers are not allowed to apply for jobs.
+            </div>
 
+        @else
             <a href="{{ route('applications.create', $post->id) }}" class="btn btn-primary">Apply for this Job</a>
+            @endif
 
         @else
             <p><a class="btn btn-primary" href="{{ route('login') }}">Log in</a> To apply for this Job and add comments.</p>

@@ -7,6 +7,9 @@ use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostManagementController;
+use App\Http\Controllers\ApplicationManagementController;
 
 // use App\Http\Controllers\UserController;
 
@@ -33,11 +36,11 @@ Route::get('applications/create/{post}', [ApplicationController::class, 'create'
 Route::post('applications', [ApplicationController::class, 'store'])->name('applications.store');
 
 
-use App\Http\Controllers\ProfileController;
 
 Route::middleware(['auth'])->group(function () {
     // Edit profile for job_seeker
 
+    // Route::get('/profile', [ProfileController::class, 'showProfile'])->middleware('auth')->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'showProfile'])->middleware('auth')->name('profile.show');
 
     Route::get('/profile/{job_seeker}/edit', [ProfileController::class, 'editJobSeeker'])->name('profile.editJobSeeker');
@@ -62,8 +65,6 @@ Route::middleware('auth')->group(function () {
     // Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
 });
 
-use App\Http\Controllers\PostManagementController;
-use App\Http\Controllers\ApplicationManagementController;
 
 Route::middleware(['auth'])->group(function () {
     // Admin routes for managing post requests

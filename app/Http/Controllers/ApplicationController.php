@@ -11,11 +11,21 @@ use App\Models\Post;
         /**
          * Show the form for creating a new application.
          */
+        // public function create(Post $post)
+        // {
+        //     return view('applications.create', compact('post'));
+        // }
         public function create(Post $post)
         {
+            // Check if the authenticated user has the 'employer' role
+            if (auth()->user()->role === 'employer') {
+                // Redirect or abort with an error message
+                return redirect()->back()->with('error', 'Employers cannot apply for jobs.');
+            }
+        
+            // If the user is not an employer, show the application form
             return view('applications.create', compact('post'));
         }
-    
         /**
          * Store a newly created application in storage.
          */
