@@ -16,7 +16,6 @@
     @foreach($posts as $post)
         <p>{{ $post->title }}</p>
         <p>Application Deadline: <span>{{ $post->application_deadline }}</span></p>
-        <a class="btn btn-success" href="{{ route('posts.show', ['id' => $post->id]) }}">View Post</a>
 
 
 

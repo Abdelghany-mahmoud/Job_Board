@@ -97,16 +97,35 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
-        // Your edit logic
-    }
+        $technologies = Technology::all();
+        $categories = Category::all();
+
+        // Get the selected technologies for this post
+        $selectedTechnologies = $post->technologies->pluck('id')->toArray();
+
+        return view('posts.edit', [
+            'post' => $post,
+            'technologies' => $technologies,
+            'categories' => $categories,
+            'selectedTechnologies' => $selectedTechnologies
+        ]);    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(StorePostRequest $request, Post $post)
     {
-        // Your update logic
-    }
+        $data = $request->validated();
+        $data['user_id'] = Auth::id(); // Make sure to assign the user_id
+
+        // Update the post
+        $post->update($data);
+
+        // Update the technologies associated with the post
+        $technologies = $request->technologies;
+        $post->technologies()->sync($technologies);
+
+        return redirect()->route('posts.show')->with('success', 'Post updated successfully');    }
 
 
     /**

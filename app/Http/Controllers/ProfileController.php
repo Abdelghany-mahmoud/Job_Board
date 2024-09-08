@@ -12,31 +12,8 @@ namespace App\Http\Controllers;
     
     class ProfileController extends Controller
     {
-        public function showProfile()
-        {
-            $user = auth()->user();
-    
-            switch ($user->role) {
-                case 'admin':
-                    // Fetch admin-specific data
-                    $postsRequests = Post::where('status', 'pending')->get(); // Example post request logic
-                    return view('profile.admin', ['user' => $user, 'postsRequests' => $postsRequests]);
-                
-                case 'employer':
-                    // Fetch employer-specific data
-                    $posts = Post::where('user_id', $user->id)->get();
-                    $applications = Application::whereIn('post_id', $posts->pluck('id'))->get();
-                    return view('profile.employer', ['user' => $user, 'posts' => $posts, 'applications' => $applications]);
-    
-                case 'job_seeker':
-                    // Fetch job_seeker-specific data
-                    $jobSeeker = Job_seeker::where('user_id', $user->id)->first();
-                    return view('profile.job_seeker', ['user' => $user, 'job_seeker' => $jobSeeker]);
-                
-                default:
-                    return redirect('/'); // Redirect to a default page if role is not recognized
-            }
-        }
+        
+        // }
 
     
 
@@ -76,26 +53,59 @@ namespace App\Http\Controllers;
         public function editEmployer($id)
         {
             $employer = Employer::findOrFail($id);
-            return view('profile.editEmployer', compact('employer'));
+            return view('profile.edit-employer', compact('employer'));
         }
         
         // Update Employer profile
-        public function updateEmployer(Request $request, Employer $employer)
-        {
-            $validated = $request->validate([
-                'profile_pic' => 'nullable|image',
-                // Add other fields specific to employer if needed
-            ]);
+        // public function updateEmployer(Request $request, Employer $employer)
+        // {
+        //     $validated = $request->validate([
+        //         'profile_pic' => 'nullable|image',
+        //         // Add other fields specific to employer if needed
+        //     ]);
     
-            if ($request->hasFile('profile_pic')) {
-                $path = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
-                $employer->profile_pic = $path;
-            }
+        //     if ($request->hasFile('profile_pic')) {
+        //         $path = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
+        //         $employer->profile_pic = $path;
+        //     }
     
-            $employer->update($validated);
+        //     $employer->update($validated);
     
-            return redirect()->route('profile.editEmployer', $employer->id)->with('success', 'Profile updated successfully');
-        }
+        //     return redirect()->route('profile.show')->with('success', 'Profile updated successfully');
+        // }
+public function updateEmployer(Request $request, Employer $employer)
+{
+    // Validate the request
+    $validated = $request->validate([
+        'profile_pic' => 'nullable|image',
+        'name' => 'required|string|max:255', // Add validation for the name field
+    ]);
+
+    // Check if the employer has an associated user
+    if ($employer->user) {
+        // Update the user's name
+        $user = $employer->user;
+        $user->name = $validated['name'];
+        $user->save(); // Save the updated user data
+    } else {
+        // If there is no associated user, redirect back with an error message
+        return redirect()->back()->withErrors('Employer does not have an associated user.');
+    }
+
+    // Handle profile picture update for the employer
+    if ($request->hasFile('profile_pic')) {
+        // Store the profile picture and assign the path to the employer's profile_pic field
+        $path = $request->file('profile_pic')->store('profile_pics', 'public');
+        $employer->profile_pic = $path;
+    }
+
+    // Update other employer-specific fields (if any)
+    $employer->update($validated);
+
+    // Redirect to the profile page with a success message
+    return redirect()->route('profile.show')->with('success', 'Profile updated successfully');
+}
+
 
         public function editAdmin(Admin $admin)
         {
@@ -122,24 +132,31 @@ namespace App\Http\Controllers;
 
 
     //     // }
-    //     public function show()
-    // {
-    //     $user = auth()->user();
-    //     $posts = [];
-    //     $applications = [];
-    //     $postsRequests = [];
-    //         $job_seeker=[];
-    //     if ($user->role == 'employer') {
-    //         $posts = $user->employer->posts;
-    //         $applications = $user->employer->applications;
-    //     } elseif ($user->role == 'admin') {
-    //         // $postsRequests = PostRequest::all(); // Assuming you have a PostRequest model for post requests
-    //     } elseif ($user->role == 'job_seeker') {
-    //         $job_seeker = $user->jobSeeker;
-    //     }
+        public function show()
+    {
+        $user = auth()->user();
+    
+        switch ($user->role) {
+            case 'admin':
+                // Fetch admin-specific data
+                $postsRequests = Post::where('status', 'pending')->get(); // Example post request logic
+                return view('profile.admin', ['user' => $user, 'postsRequests' => $postsRequests]);
+            
+            case 'employer':
+                // Fetch employer-specific data
+                $posts = Post::where('user_id', $user->id)->get();
+                $applications = Application::whereIn('post_id', $posts->pluck('id'))->get();
+                return view('profile.employer', ['user' => $user, 'posts' => $posts, 'applications' => $applications]);
 
-    //     return view('profile.show', compact('user', 'posts', 'applications', 'postsRequests', 'job_seeker'));
-    // }
+            case 'job_seeker':
+                // Fetch job_seeker-specific data
+                $jobSeeker = Job_seeker::where('user_id', $user->id)->first();
+                return view('profile.job_seeker', ['user' => $user, 'job_seeker' => $jobSeeker]);
+            
+            default:
+                return redirect('/'); // Redirect to a default page if role is not recognized
+        }
+    }
 
    
 //         public function editProfile()

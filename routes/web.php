@@ -39,16 +39,17 @@ Route::post('applications', [ApplicationController::class, 'store'])->name('appl
 
 Route::middleware(['auth'])->group(function () {
     // Edit profile for job_seeker
-
-    // Route::get('/profile', [ProfileController::class, 'showProfile'])->middleware('auth')->name('profile.show');
-    Route::get('/profile', [ProfileController::class, 'showProfile'])->middleware('auth')->name('profile.show');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth')->name('profile.show');
+    });
+    
 
     Route::get('/profile/{job_seeker}/edit', [ProfileController::class, 'editJobSeeker'])->name('profile.editJobSeeker');
     Route::post('/profile/{job_seeker}/update', [ProfileController::class, 'updateJobSeeker'])->name('profile.updateJobSeeker');
 
-    // Edit profile for employer
-    Route::get('/profile/{employer}/edit', [ProfileController::class, 'editEmployer'])->name('profile.editEmployer');
-    Route::post('/profile/{employer}/update', [ProfileController::class, 'updateEmployer'])->name('profile.updateEmployer');
+Route::get('/profile/employer/{id}/edit', [ProfileController::class, 'editEmployer'])->name('profile.editEmployer');
+Route::put('/profile/employer/{id}', [ProfileController::class, 'updateEmployer'])->name('profile.updateEmployer');
+
 
     // Edit profile for admin
     Route::get('/profile/{admin}/edit', [ProfileController::class, 'editAdmin'])->name('profile.editAdmin');

@@ -49,6 +49,36 @@ class User extends Authenticatable
                         break;
                 }
             });
+            static::updated(function ($user) {
+                switch ($user->role) {
+                    case 'employer':
+                        Employer::where('user_id', $user->id)->update([
+                            'company_name' => $user->company_name,
+                            'company_website' => $user->company_website,
+                        ]);
+                        break;
+        
+                    case 'admin':
+                        Admin::where('user_id', $user->id)->update([
+                            'profile_pic' => $user->profile_pic, 
+                        ]);
+                        break;
+        
+                    case 'job_seeker':
+                        Job_seeker::where('user_id', $user->id)->update([
+                            'linkedin_profile' => $user->linkedin_profile, 
+                            'skills' => $user->skills,
+                            'phone' => $user->phone,
+                            'location' => $user->location,
+                            'bio' => $user->bio,
+                            'profile_pic' => $user->profile_pic,
+                        ]);
+                        break;
+        
+                    default:
+                        break;
+                }
+            });
         }
     
     
