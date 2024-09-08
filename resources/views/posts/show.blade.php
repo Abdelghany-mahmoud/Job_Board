@@ -23,9 +23,23 @@
 
         <!-- Check if the authenticated user is the creator of the post -->
 @if (Auth::id() === $post->user_id)
-    <a clas="btn btn-secondary" href="{{ route('posts.edit', $post->id) }}">Edit</a>
+    <a clas="btn btn-secondary" href="{{ route('posts.edit', $post->id) }}">Edit Post</a>
+    <br>
+<a href="{{ route('posts.applications', $post->id) }}">View Applications</a>
+
+
+@endif
+    <!-- Show link -->
+   @if(Auth::user() && Auth::user()->role === 'job_seeker')
+    <!-- Only job seekers can see these links -->
+    <a href="{{ route('applications.user.post', $post->id) }}" class="btn btn-primary">View Your Applications on This Post</a>
+    <a href="{{ route('applications.status') }}" class="btn btn-primary">View All Your Applications</a>
 @endif
 
+@if(Auth::user() && Auth::user()->role === 'admin')
+    <!-- Only admins can see these links -->
+    <a href="{{ route('admin.applications.post', $post->id) }}" class="btn btn-primary">View All Applications on This Post (Admin)</a>
+@endif
 
         <h3>Comments</h3>
      @if ($comments->isEmpty())

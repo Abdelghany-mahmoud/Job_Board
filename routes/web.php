@@ -26,6 +26,7 @@ Route::resource('posts', PostsController::class);
 // Route::get('/profile/edit/{id}', [Job_seekerController::class, 'edit'])->name('profile.edit');
 // Route::put('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
 
+Route::put('/posts/{post}', [PostsController::class, 'update'])->name('posts.update');
 
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('newComment.store');
 
@@ -96,3 +97,36 @@ Route::middleware('auth')->group(function () {
     // Route to handle denying an application
     Route::post('/applications/{application}/deny', [PostsController::class, 'denyApplication'])->name('applications.deny');
 });
+
+// Applicant routes
+Route::middleware(['auth', 'role:job_seeker'])->group(function () {
+    Route::get('applications/status', [ApplicationController::class, 'showApplicationStatus'])->name('applications.status');
+    Route::get('applications/{id}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
+    Route::put('applications/{id}', [ApplicationController::class, 'update'])->name('applications.update');
+    Route::delete('applications/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
+});
+
+// Admin routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('admin/applications', [ApplicationController::class, 'showAllApplications'])->name('admin.applications.index');
+    Route::delete('admin/applications/{id}', [ApplicationController::class, 'destroyAsAdmin'])->name('admin.applications.destroy');
+});
+
+
+// Applicant routes
+// Route::middleware(['auth', 'role:job_seeker'])->group(function () {
+//     Route::get('applications/post/{postId}', [ApplicationController::class, 'showUserApplicationsOnPost'])
+//         ->name('applications.user.post');
+//     Route::get('applications/status', [ApplicationController::class, 'showApplicationStatus'])
+//         ->name('applications.status');
+// });
+
+// // Admin routes
+// Route::middleware(['auth', 'role:admin'])->group(function () {
+//     Route::get('admin/applications/post/{postId}', [ApplicationController::class, 'showAllApplicationsOnPost'])
+//         ->name('admin.applications.post');
+// });
+
+Route::get('applications/user/post/{postId}', [ApplicationController::class, 'showUserApplications'])->name('applications.user.post');
+Route::get('applications/status', [ApplicationController::class, 'showApplications'])->name('applications.status');
+Route::get('admin/applications/post/{postId}', [AdminController::class, 'showPostApplications'])->name('admin.applications.post');
