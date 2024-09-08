@@ -94,3 +94,23 @@ Route::middleware('auth')->group(function () {
     // Route to handle denying an application
     Route::post('/applications/{application}/deny', [PostsController::class, 'denyApplication'])->name('applications.deny');
 });
+
+
+// Admin Dashboard
+
+// Route::get('/admin/dashboard', function () {
+//     return view('admin.dashboard'); 
+// })->name('admin.dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
+// Add this route for logout
+Route::middleware('web')->group(function () {
+    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+    
+});
+

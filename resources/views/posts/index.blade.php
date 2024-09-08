@@ -22,7 +22,6 @@
     height: 400px;
     position: relative;
     top: -25px;
-
   }
 
   .hero:after {
@@ -33,13 +32,12 @@
     top: 0;
     left: 0;
     background-color: rgb(0, 0, 0, .7);
-    z-index: 1;
-
+    z-index: -5;
   }
 
   .container {
     position: relative;
-    z-index: 10;
+    /* z-index: 10; */
   }
 
   .hero-div {
@@ -88,6 +86,7 @@
     background: #fff;
     border: 1px solid #C6CDD0;
     transition: all .3s ease;
+    cursor: pointer;
 
   }
 
@@ -160,15 +159,15 @@
     <p class="text-gray-600 mb-8">Browse through thousands of job listings and apply today!</p>
 
     <!-- Search Form -->
-    <form style="z-index: 2; position: relative;"
+    <form style="z-index: 99; position: relative;"
       action="{{ route('posts.index') }}" method="GET" class="search-form flex justify-center mb-8">
-      <input style="z-index: 2;"
+      <input style="z-index: 99;"
         type="text"
         name="search"
         value="{{ request('search') }}"
         placeholder="Search jobs by title, company, location, or tags..."
         class="form-control search-input" />
-      <button style="z-index:2;" type="submit" class="search-btn">
+      <button style="z-index: 99;" type="submit" class="search-btn">
         Search Jobs
       </button>
     </form>
@@ -181,7 +180,7 @@
   <div class="heading">
     <h2>Job Listings</h2>
 
-    <!-- <div style="margin-top: 20px;">
+     <div style="margin-top: 20px;">
             <span>Programming</span>
             <span class="tag">Design</span>
             <span class="tag">Machine Learning</span>
@@ -190,7 +189,7 @@
             <span class="tag">Marketting</span>
             <span class="tag">Engineering</span>
             <span class="tag">Sales</span>
-        </div> -->
+        </div> 
   </div>
   @if(session('success'))
   <div class="alert alert-primary d-flex align-items-center mt-3" role="alert">
@@ -205,12 +204,12 @@
     <!-- Company Logo and Name -->
     <div>
       <div class="d-flex align-items-center mb-3">
-        <!-- <img src="{{ asset('logos/1.jpeg') }}" alt="Company Logo" class="job-logo"> -->
+        <img src="{{ asset('logos/1.jpeg') }}" alt="Company Logo" class="job-logo">
         <a href="{{ route('posts.show',$post) }}" style="text-decoration: none;">
           <span style="font-size: 1.2rem; color: #0046B2;  cursor: pointer;"> {{ ucwords($post->title) }} </span>
         </a>
       </div>
-      <!-- <span class="company-name">{{ $post->user->name }} </span> -->
+      <span class="company-name">{{ $post->user->name }} </span>
 
       <span>{{ $post->location }}</span>
       <p> <span style="color:#709466;">{{ $post->created_at->diffForHumans() }}</span></p>
@@ -239,7 +238,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                Are you sure you want to delete this post !
+                Are you sure you want to delete this job?
               </div>
               <div class="modal-footer">
                 @csrf

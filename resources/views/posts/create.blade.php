@@ -116,7 +116,7 @@
       @enderror
     </div>
 
-    <input type="submit" value="Submit" class="btn btn-secondary">
+    <input type="submit" value="Post" class="btn btn-secondary">
   </form>
 </div>
 @endsection
