@@ -11,7 +11,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostManagementController;
 use App\Http\Controllers\ApplicationManagementController;
 
-// use App\Http\Controllers\UserController;
 
 
 Auth::routes();
@@ -20,11 +19,6 @@ Route::get('/', function () {
     return redirect()->route('posts.index');
 });
 Route::resource('posts', PostsController::class);
-
-// Route::get('/profile/{id}', [Job_seekerController::class, 'show'])->name('profile.show');
-// Route::post('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
-// Route::get('/profile/edit/{id}', [Job_seekerController::class, 'edit'])->name('profile.edit');
-// Route::put('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
 
 Route::put('/posts/{post}', [PostsController::class, 'update'])->name('posts.update');
 
@@ -63,10 +57,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
-    // Route::get('/profile/edit', [ProfileController::class, 'editProfile'])->name('profile.edit');
 
-    // Route to handle profile updates
-    // Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
 });
 
 
@@ -75,10 +66,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post}/approve', [PostManagementController::class, 'approve'])->name('approvePost');
     Route::post('/posts/{post}/deny', [PostManagementController::class, 'deny'])->name('denyPost');
 
-    // // Employer routes for managing applications
-    // Route::post('/applications/{application}/accept', [ApplicationManagementController::class, 'accept'])->name('acceptApplication');
-    // Route::post('/applications/{application}/reply', [ApplicationManagementController::class, 'reply'])->name('replyApplication');
-    // Route::post('/applications/{application}/deny', [ApplicationManagementController::class, 'deny'])->name('denyApplication');
 });
 
 Route::middleware('auth')->group(function () {
@@ -115,19 +102,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 
-// Applicant routes
-// Route::middleware(['auth', 'role:job_seeker'])->group(function () {
-//     Route::get('applications/post/{postId}', [ApplicationController::class, 'showUserApplicationsOnPost'])
-//         ->name('applications.user.post');
-//     Route::get('applications/status', [ApplicationController::class, 'showApplicationStatus'])
-//         ->name('applications.status');
-// });
-
-// // Admin routes
-// Route::middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('admin/applications/post/{postId}', [ApplicationController::class, 'showAllApplicationsOnPost'])
-//         ->name('admin.applications.post');
-// });
 
 Route::get('applications/user/post/{postId}', [ApplicationController::class, 'showUserApplications'])->name('applications.user.post');
 Route::get('applications/status', [ApplicationController::class, 'showApplications'])->name('applications.status');
