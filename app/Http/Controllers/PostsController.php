@@ -25,7 +25,7 @@ class PostsController extends Controller
     {
         // Retrieve the search query from the request
         $search = $request->input('search');
-    
+
         // If there's a search query, filter posts by the search criteria
         if ($search) {
             $posts = Post::where('title', 'like', '%' . $search . '%')
@@ -37,14 +37,14 @@ class PostsController extends Controller
             // If no search query, return all posts ordered by latest created
             $posts = Post::orderBy('created_at', 'desc')->get();
         }
-    
+
         // Include the Technologies relation to avoid N+1 problem
         $Technologies_post = Technologies_post::with('technology')->get();
-    
+
         // Pass the posts and the search query to the view
         return view('posts.index', compact('posts', 'Technologies_post', 'search'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -108,61 +108,63 @@ class PostsController extends Controller
             'technologies' => $technologies,
             'categories' => $categories,
             'selectedTechnologies' => $selectedTechnologies
-        ]);    }
-
-   
-    public function update(StorePostRequest $request, Post $post)
-{
-    $data = $request->validated();
-    $data['user_id'] = Auth::id(); // Make sure to assign the user_id
-
-    // Update the post
-    $post->update($data);
-
-    // Update the technologies associated with the post
-    $technologies = $request->technologies;
-    $post->technologies()->sync($technologies);
-
-    return redirect()->route('posts.show', $post->id)->with('success', 'Post updated successfully');
-}
-public function showPostApplications($postId)
-{
-    $post = Post::where('user_id', Auth::id())->with('applications.user')->findOrFail($postId);
-    $applications = $post->applications()->paginate(10); // Paginate applications
-
-    return view('posts.applications', compact('post', 'applications'));
-}
-
-public function replyToApplication(Request $request, $applicationId)
-{
-    $request->validate([
-        'reply' => 'required|string',
-    ]);
-
-    $application = Application::findOrFail($applicationId);
-    $application->reply = $request->input('reply');
-    $application->status = 'replied';
-    $application->save();
-
-    return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application replied successfully.');
-}
+        ]);
+    }
 
 
-public function approveApplication($applicationId)
-{
-    $application = Application::findOrFail($applicationId);
-    $application->status = 'accepted';
-    $application->save();
+    public function update(StorePostRequest $request, Post $post,)
+    {
+        $data = $request->validated();
+        $data['user_id'] = Auth::id(); // Make sure to assign the user_id
+        
+        // Update the post
+        
+        $post->update($data);
+        
+        // Update the technologies associated with the post
+        $technologies = $request->technologies;
+        $post->technologies()->sync($technologies);
 
-    return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application approved successfully.');
-}
+        return redirect()->route('posts.show', $post)->with('success', 'Post updated successfully');
+    }
+    public function showPostApplications($postId)
+    {
+        $post = Post::where('user_id', Auth::id())->with('applications.user')->findOrFail($postId);
+        $applications = $post->applications()->paginate(10); // Paginate applications
 
-public function denyApplication($applicationId)
-{
-    $application = Application::findOrFail($applicationId);
-    $application->status = 'denied';
-    $application->save();
+        return view('posts.applications', compact('post', 'applications'));
+    }
 
-    return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application denied successfully.');
-}
+    public function replyToApplication(Request $request, $applicationId)
+    {
+        $request->validate([
+            'reply' => 'required|string',
+        ]);
+
+        $application = Application::findOrFail($applicationId);
+        $application->reply = $request->input('reply');
+        $application->status = 'replied';
+        $application->save();
+
+        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application replied successfully.');
+    }
+
+
+    public function approveApplication($applicationId)
+    {
+        $application = Application::findOrFail($applicationId);
+        $application->status = 'accepted';
+        $application->save();
+
+        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application approved successfully.');
+    }
+
+    public function denyApplication($applicationId)
+    {
+        $application = Application::findOrFail($applicationId);
+        $application->status = 'denied';
+        $application->save();
+
+        return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application denied successfully.');
+    }
 }

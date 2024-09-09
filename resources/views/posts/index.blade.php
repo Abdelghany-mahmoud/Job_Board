@@ -37,9 +37,9 @@
 
   }
 
-  .container {
+  .hero .container {
     position: relative;
-    z-index: 10;
+    z-index: 2;
   }
 
   .hero-div {
@@ -154,23 +154,17 @@
 </style>
 
 <!-- Hero Section -->
-<section class="bg-gray-100 py-20 hero" style="z-index: -1;">
+<section class="bg-gray-100 py-20 hero">
   <div class="container hero-div mx-auto text-center">
-    <h1 class="text-5xl font-bold text-gray-800 mb-6">Discover the best jobs tailored to your skills</h1>
-    <p class="text-gray-600 mb-8">Browse through thousands of job listings and apply today!</p>
+    <h1 class="text-5xl font-bold text-gray-800 mb-6"> Discover the best jobs tailored to your skills </h1>
+    <p class="text-gray-600 mb-8"> Browse through thousands of job listings and apply today! </p>
 
     <!-- Search Form -->
-    <form style="z-index: 2; position: relative;"
-      action="{{ route('posts.index') }}" method="GET" class="search-form flex justify-center mb-8">
-      <input style="z-index: 2;"
-        type="text"
-        name="search"
-        value="{{ request('search') }}"
-        placeholder="Search jobs by title, company, location, or tags..."
-        class="form-control search-input" />
-      <button style="z-index:2;" type="submit" class="search-btn">
-        Search Jobs
-      </button>
+    <form style="z-index:99; position: relative;" action="{{ route('posts.index') }}" method="GET"
+    class="search-form flex justify-center mb-8">
+      <input type="text" name="search" value="{{ request('search') }}" class="form-control search-input" 
+      placeholder="Search jobs by title, company, location, or tags..." />
+      <button type="submit" class="search-btn">Search Jobs</button>
     </form>
   </div>
 </section>
