@@ -12,7 +12,10 @@
                     <h4 class="card-title">{{ auth()->user()->name }}</h4>
                     <p class="card-text">{{ $job_seeker->bio }}</p>
     <a href="{{ route('profile.editJobSeeker', auth()->user()->job_seeker->id) }}">Edit Profile</a>
-
+    @if(Auth::user() && Auth::user()->role === 'job_seeker')
+    <!-- Only job seekers can see these links -->
+    <a href="{{ route('applications.status') }}" class="btn btn-primary">View All Your Applications</a>
+@endif
                 </div>
             </div>
         </div>

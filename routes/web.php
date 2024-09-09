@@ -7,6 +7,9 @@ use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostManagementController;
+use App\Http\Controllers\ApplicationManagementController;
 
 // use App\Http\Controllers\UserController;
 
@@ -23,6 +26,7 @@ Route::resource('posts', PostsController::class);
 // Route::get('/profile/edit/{id}', [Job_seekerController::class, 'edit'])->name('profile.edit');
 // Route::put('/profile/{id}', [Job_seekerController::class, 'update'])->name('profile.update');
 
+Route::put('/posts/{post}', [PostsController::class, 'update'])->name('posts.update');
 
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('newComment.store');
 
@@ -33,19 +37,20 @@ Route::get('applications/create/{post}', [ApplicationController::class, 'create'
 Route::post('applications', [ApplicationController::class, 'store'])->name('applications.store');
 
 
-use App\Http\Controllers\ProfileController;
 
 Route::middleware(['auth'])->group(function () {
     // Edit profile for job_seeker
-
-    Route::get('/profile', [ProfileController::class, 'showProfile'])->middleware('auth')->name('profile.show');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth')->name('profile.show');
+    });
+    
 
     Route::get('/profile/{job_seeker}/edit', [ProfileController::class, 'editJobSeeker'])->name('profile.editJobSeeker');
     Route::post('/profile/{job_seeker}/update', [ProfileController::class, 'updateJobSeeker'])->name('profile.updateJobSeeker');
 
-    // Edit profile for employer
-    Route::get('/profile/{employer}/edit', [ProfileController::class, 'editEmployer'])->name('profile.editEmployer');
-    Route::post('/profile/{employer}/update', [ProfileController::class, 'updateEmployer'])->name('profile.updateEmployer');
+Route::get('/profile/employer/{id}/edit', [ProfileController::class, 'editEmployer'])->name('profile.editEmployer');
+Route::put('/profile/employer/{id}', [ProfileController::class, 'updateEmployer'])->name('profile.updateEmployer');
+
 
     // Edit profile for admin
     Route::get('/profile/{admin}/edit', [ProfileController::class, 'editAdmin'])->name('profile.editAdmin');
@@ -62,8 +67,6 @@ Route::middleware('auth')->group(function () {
     // Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
 });
 
-use App\Http\Controllers\PostManagementController;
-use App\Http\Controllers\ApplicationManagementController;
 
 Route::middleware(['auth'])->group(function () {
     // Admin routes for managing post requests
@@ -94,3 +97,36 @@ Route::middleware('auth')->group(function () {
     // Route to handle denying an application
     Route::post('/applications/{application}/deny', [PostsController::class, 'denyApplication'])->name('applications.deny');
 });
+
+// Applicant routes
+Route::middleware(['auth', 'role:job_seeker'])->group(function () {
+    Route::get('applications/status', [ApplicationController::class, 'showApplicationStatus'])->name('applications.status');
+    Route::get('applications/{id}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
+    Route::put('applications/{id}', [ApplicationController::class, 'update'])->name('applications.update');
+    Route::delete('applications/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
+});
+
+// Admin routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('admin/applications', [ApplicationController::class, 'showAllApplications'])->name('admin.applications.index');
+    Route::delete('admin/applications/{id}', [ApplicationController::class, 'destroyAsAdmin'])->name('admin.applications.destroy');
+});
+
+
+// Applicant routes
+// Route::middleware(['auth', 'role:job_seeker'])->group(function () {
+//     Route::get('applications/post/{postId}', [ApplicationController::class, 'showUserApplicationsOnPost'])
+//         ->name('applications.user.post');
+//     Route::get('applications/status', [ApplicationController::class, 'showApplicationStatus'])
+//         ->name('applications.status');
+// });
+
+// // Admin routes
+// Route::middleware(['auth', 'role:admin'])->group(function () {
+//     Route::get('admin/applications/post/{postId}', [ApplicationController::class, 'showAllApplicationsOnPost'])
+//         ->name('admin.applications.post');
+// });
+
+Route::get('applications/user/post/{postId}', [ApplicationController::class, 'showUserApplications'])->name('applications.user.post');
+Route::get('applications/status', [ApplicationController::class, 'showApplications'])->name('applications.status');
+Route::get('admin/applications/post/{postId}', [AdminController::class, 'showPostApplications'])->name('admin.applications.post');

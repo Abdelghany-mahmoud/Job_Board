@@ -7,16 +7,15 @@
 
     <a href="{{ route('profile.editEmployer', auth()->user()->employer->id) }}">Edit Profile</a>
 
-@if(auth()->user()->isEmployer())
     <h2>{{ auth()->user()->employer->company_name }}</h2>
     <p>{{ auth()->user()->employer->company_website }}</p>
-@endif
 
     <h2>Your Posts</h2>
     @foreach($posts as $post)
         <p>{{ $post->title }}</p>
         <p>Application Deadline: <span>{{ $post->application_deadline }}</span></p>
         <a class="btn btn-success" href="{{ route('posts.show', ['id' => $post->id]) }}">View Post</a>
+        
 
 
 

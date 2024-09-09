@@ -15,6 +15,8 @@
         <thead>
             <tr>
                 <th>Applicant Name</th>
+                <th>Application Content</th>
+                <th>Expected Salary</th>
                 <th>Status</th>
                 <th>Reply</th>
                 <th>Applied At</th>
@@ -23,32 +25,36 @@
         </thead>
         <tbody>
         @foreach ($applications as $application)
-        <tr>
-                    <td>{{ $application->user->name }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>{{ $application->reply ?? 'No reply yet' }}</td>
-                    <td>{{ $application->created_at->format('d-m-Y H:i') }}</td>
-                    <td>
-                        @if ($application->status == 'pending')
-                            <form action="{{ route('applications.reply', $application->id) }}" method="POST">
-                                @csrf
-                                <textarea name="reply">{{ $application->reply }}</textarea>
-                                <button type="submit">Reply</button>
-                            </form>
-                            <form action="{{ route('applications.approve', $application->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                <button type="submit">Approve</button>
-                            </form>
-                            <form action="{{ route('applications.deny', $application->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                <button type="submit">Deny</button>
-                            </form>
-                        @else
-                            <span>Action Not Available</span>
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
+            <tr>
+                <td>{{ $application->user->name }}</td>
+                <td>{{ $application->content }}</td> <!-- Application content -->
+                <td>{{ $application->expected_salary ? '$' . number_format($application->expected_salary, 2) : 'Not provided' }}</td> <!-- Expected salary -->
+                <td>{{ $application->status }}</td>
+                <td>{{ $application->reply ?? 'No reply yet' }}</td>
+                <td>{{ $application->created_at->format('d-m-Y H:i') }}</td>
+                <td>
+                    @if ($application->status == 'pending')
+                        <!-- Reply Form -->
+                        <form action="{{ route('applications.reply', $application->id) }}" method="POST" style="margin-bottom: 5px;">
+                            @csrf
+                            <textarea name="reply" placeholder="Your reply">{{ $application->reply }}</textarea>
+                            <button type="submit">Reply</button>
+                        </form>
+                        <!-- Approve/Deny Actions -->
+                        <form action="{{ route('applications.approve', $application->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit">Approve</button>
+                        </form>
+                        <form action="{{ route('applications.deny', $application->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit">Deny</button>
+                        </form>
+                    @else
+                        <span>Action Not Available</span>
+                    @endif
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
 

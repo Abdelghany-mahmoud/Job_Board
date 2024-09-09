@@ -8,14 +8,18 @@ use App\Models\Post;
     
     class ApplicationController extends Controller
     {
-        /**
-         * Show the form for creating a new application.
-         */
+
         public function create(Post $post)
         {
+            // Check if the authenticated user has the 'employer' role
+            if (auth()->user()->role === 'employer') {
+                // Redirect or abort with an error message
+                return redirect()->back()->with('error', 'Employers cannot apply for jobs.');
+            }
+        
+            // If the user is not an employer, show the application form
             return view('applications.create', compact('post'));
         }
-    
         /**
          * Store a newly created application in storage.
          */
@@ -36,13 +40,13 @@ use App\Models\Post;
     
             return redirect()->route('posts.show', $request->input('post_id'))->with('success', 'Application submitted successfully');
         }
-        public function showApplicationStatus()
-    {
-        $userId = Auth::id(); // Get the current authenticated user ID
-        $applications = Application::where('user_id', $userId)->with('post')->get(); // Fetch applications for the current user with related posts
+    //     public function showApplicationStatus()
+    // {
+    //     $userId = Auth::id(); // Get the current authenticated user ID
+    //     $applications = Application::where('user_id', $userId)->with('post')->get(); // Fetch applications for the current user with related posts
 
-        return view('applications.status', compact('applications')); // Pass applications to the view
-    }
+    //     return view('applications.status', compact('applications')); // Pass applications to the view
+    // }
 
     public function showApplications()
     {
@@ -52,18 +56,96 @@ use App\Models\Post;
         return view('applications.status', compact('applications')); // Pass paginated applications to the view
     }
 
-    public function updateApplication(Request $request, $applicationId)
-    {
-        $request->validate([
-            'reply' => 'nullable|string',
-        ]);
+    // public function updateApplication(Request $request, $applicationId)
+    // {
+    //     $request->validate([
+    //         'reply' => 'nullable|string',
+    //     ]);
 
-        $application = Application::where('user_id', Auth::id())->findOrFail($applicationId); // Ensure user owns the application
-        $application->reply = $request->input('reply');
-        $application->save();
+    //     $application = Application::where('user_id', Auth::id())->findOrFail($applicationId); // Ensure user owns the application
+    //     $application->reply = $request->input('reply');
+    //     $application->save();
 
-        return redirect()->route('applications.status')->with('success', 'Application updated successfully.');
+    //     return redirect()->route('applications.status')->with('success', 'Application updated successfully.');
+    // }
+
+    public function edit($id)
+{
+    $application = Application::where('user_id', Auth::id())->findOrFail($id); // Ensure user owns the application
+    return view('applications.edit', compact('application'));
+}
+
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'content' => 'required|string|max:1000',
+        'expected_salary' => 'nullable|numeric|min:0',
+    ]);
+
+    $application = Application::where('user_id', Auth::id())->findOrFail($id); // Ensure user owns the application
+    $application->update([
+        'content' => $request->input('content'),
+        'expected_salary' => $request->input('expected_salary'),
+    ]);
+
+    return redirect()->route('applications.status')->with('success', 'Application updated successfully.');
+}
+
+public function destroy($id)
+{
+    $application = Application::where('user_id', Auth::id())->findOrFail($id); // Ensure user owns the application
+    $application->delete();
+
+    return redirect()->route('applications.status')->with('success', 'Application deleted successfully.');
+}
+
+// Admin delete function
+public function destroyAsAdmin($id)
+{
+    Application::findOrFail($id)->delete(); // Admin can delete any application
+    return redirect()->route('admin.applications.index')->with('success', 'Application deleted successfully.');
+}
+
+
+// public function showUserApplicationsOnPost($postId)
+// {
+//     $userId = Auth::id();
+//     $applications = Application::where('user_id', $userId)
+//         ->where('post_id', $postId)
+//         ->with('post')
+//         ->get();
+
+//     return view('applications.user_post_applications', compact('applications'));
+// }
+// public function showAllApplicationsOnPost($postId)
+// {
+//     $applications = Application::where('post_id', $postId)
+//         ->with('user', 'post')
+//         ->get();
+
+//     return view('admin.applications.post_applications', compact('applications'));
+// }
+
+public function showUserApplications($postId)
+{
+    if (Auth::user()->role !== 'job_seeker') {
+        return redirect()->back()->with('error', 'Unauthorized access.');
     }
+
+    $applications = Application::where('user_id', Auth::id())->where('post_id', $postId)->get();
+    return view('applications.user_post', compact('applications'));
+}
+
+public function showPostApplications($postId)
+{
+    if (Auth::user()->role !== 'admin') {
+        return redirect()->back()->with('error', 'Unauthorized access.');
+    }
+
+    $applications = Application::where('post_id', $postId)->get();
+    return view('admin.post_applications', compact('applications'));
+}
+
     }
     
 

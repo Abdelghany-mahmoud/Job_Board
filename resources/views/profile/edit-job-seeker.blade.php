@@ -29,6 +29,7 @@
         <label for="bio">Bio</label>
         <textarea name="bio">{{ $job_seeker->bio }}</textarea>
     </div>
+    <a href="{{ route('applications.status') }}" class="btn btn-primary">View All Your Applications</a>
 
     <button type="submit">Update Profile</button>
 </form>
