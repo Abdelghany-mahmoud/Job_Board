@@ -36,12 +36,14 @@ Route::resource('comments', CommentController::class);
 Route::get('applications/create/{post}', [ApplicationController::class, 'create'])->name('applications.create');
 Route::post('applications', [ApplicationController::class, 'store'])->name('applications.store');
 
+Route::get('/posts/{post}', [PostsController::class, 'show'])->name('posts.show');
 
 
 Route::middleware(['auth'])->group(function () {
     // Edit profile for job_seeker
     Route::middleware(['auth'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth')->name('profile.show');
+
     });
     
 
