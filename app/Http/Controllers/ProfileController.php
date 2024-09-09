@@ -13,9 +13,7 @@ namespace App\Http\Controllers;
     class ProfileController extends Controller
     {
         
-        // }
-
-    
+ 
 
         public function editJobSeeker(Job_seeker $job_seeker)
         {
@@ -43,36 +41,16 @@ namespace App\Http\Controllers;
             // Update other fields
             $job_seeker->update($validated);
     
-            return redirect()->route('profile.editJobSeeker', $job_seeker->id)->with('success', 'Profile updated successfully');
+            return redirect()->route('profile.show')->with('success', 'Profile updated successfully');
         }
 
-        // public function editEmployer(Employer $employer)
-        // {
-        //     return view('profile.edit-employer', compact('employer'));
-        // }
+      
         public function editEmployer($id)
         {
             $employer = Employer::findOrFail($id);
             return view('profile.edit-employer', compact('employer'));
         }
-        
-        // Update Employer profile
-        // public function updateEmployer(Request $request, Employer $employer)
-        // {
-        //     $validated = $request->validate([
-        //         'profile_pic' => 'nullable|image',
-        //         // Add other fields specific to employer if needed
-        //     ]);
-    
-        //     if ($request->hasFile('profile_pic')) {
-        //         $path = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
-        //         $employer->profile_pic = $path;
-        //     }
-    
-        //     $employer->update($validated);
-    
-        //     return redirect()->route('profile.show')->with('success', 'Profile updated successfully');
-        // }
+  
 public function updateEmployer(Request $request, Employer $employer)
 {
     // Validate the request
@@ -131,7 +109,6 @@ public function updateEmployer(Request $request, Employer $employer)
         }
 
 
-    //     // }
         public function show()
     {
         $user = auth()->user();
@@ -159,61 +136,6 @@ public function updateEmployer(Request $request, Employer $employer)
     }
 
    
-//         public function editProfile()
-// {
-//     $user = auth()->user();
-
-//     if ($user->role == 'job_seeker') {
-//         $job_seeker = $user->jobSeeker;
-//         return view('profile.editProfile', compact('job_seeker'));
-//     } elseif ($user->role == 'employer') {
-//         $employer = $user->employer;
-//         return view('profile.editProfile', compact('employer'));
-//     } elseif ($user->role == 'admin') {
-//         $admin = $user->admin;
-//         return view('profile.editProfile', compact('admin'));
-//     }
-// }
-
-// public function updateProfile(Request $request)
-// {
-//     $user = auth()->user();
-
-//     if ($user->role == 'job_seeker') {
-//         $job_seeker = $user->jobSeeker;
-//         $job_seeker->update($request->except('profile_picture'));
-
-//         if ($request->hasFile('profile_picture')) {
-//                 $path = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
-//         $job_seeker->profile_picture = $path;
-//             $job_seeker->save();
-//         }
-
-//         return redirect()->route('profile.show');
-//     } elseif ($user->role == 'employer') {
-//         $employer = $user->employer;
-//         $employer->update($request->except('company_logo'));
-
-//         if ($request->hasFile('company_logo')) {
-//             $path = $request->file('company_logo')->store('company_logos', 'public');
-//             $employer->company_logo = $path;
-//             $employer->save();
-//         }
-
-//         return redirect()->route('profile.show');
-//     } elseif ($user->role == 'admin') {
-//         $admin = $user->admin;
-//         $admin->update($request->except('profile_picture'));
-
-//         if ($request->hasFile('profile_picture')) {
-//             $path = $request->file('profile_picture')->store('admin_pics', 'public');
-//             $admin->profile_picture = $path;
-//             $admin->save();
-//         }
-
-//         return redirect()->route('profile.show');
-//     }
-// }
 
     }
 
