@@ -37,6 +37,9 @@
                     @csrf
                     <textarea name="reply">{{ $application->reply }}</textarea>
                     <button type="submit">Update Reply</button>
+                    <a href="{{ route('applications.edit', $application->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+
                 </form>
                 @else
                 <span>Action Not Available</span>
@@ -44,13 +47,11 @@
 
 
                 <!-- Link to edit application -->
-                <a href="{{ route('applications.edit', $application->id) }}" class="btn btn-sm btn-warning">Edit</a>
 
                 <!-- Delete form -->
                 <form action="{{ route('applications.destroy', $application->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                 </form>
             </td>
         </tr>

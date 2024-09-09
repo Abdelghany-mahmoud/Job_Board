@@ -11,19 +11,31 @@ class ApplicationController extends Controller
 {
 
   public function create(Post $post)
-  {
-    if (Auth::user()->application->count() >= 1) {
-      return redirect()->route('posts.show',$post)->with('error', 'You can\'t already apllied for this job');
-      };
-    // Check if the authenticated user has the 'employer' role
-    if (Auth::user()->role === 'employer') {
-      // Redirect or abort with an error message
-      return redirect()->back()->with('error', 'Employers cannot apply for jobs.');
+{
+    // Get the authenticated user
+    $user = Auth::user();
+
+    // Check if the user has already applied to the specific post
+    $hasApplied = Application::where('user_id', $user->id)
+                             ->where('post_id', $post->id)
+                             ->exists();
+
+    if ($hasApplied) {
+        // Redirect with an error message if the user has already applied
+        return redirect()->route('posts.show', $post->id)
+                         ->with('error', 'You have already applied for this job.');
     }
 
-    // If the user is not an employer, show the application form
+    // Check if the authenticated user has the 'employer' role
+    if ($user->role === 'employer') {
+        // Redirect or abort with an error message
+        return redirect()->back()->with('error', 'Employers cannot apply for jobs.');
+    }
+
+    // If the user is not an employer and hasn't applied yet, show the application form
     return view('applications.create', compact('post'));
-  }
+}
+
   /**
    * Store a newly created application in storage.
    */

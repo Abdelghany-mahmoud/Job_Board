@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Post Applications</title>
-</head>
-<body>
-    <h1>Applications for Post: {{ $post->title }}</h1>
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+
+     <h1>Applications for Post: {{ $post->title }}</h1>
 
     @if (session('success'))
         <p>{{ session('success') }}</p>
     @endif
 
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Applicant Name</th>
@@ -24,6 +22,7 @@
             </tr>
         </thead>
         <tbody>
+            
         @foreach ($applications as $application)
             <tr>
                 <td>{{ $application->user->name }}</td>
@@ -60,5 +59,5 @@
 
     <!-- Pagination Links -->
     {{ $applications->links() }}
-</body>
-</html>
+    </div>
+    @endsection

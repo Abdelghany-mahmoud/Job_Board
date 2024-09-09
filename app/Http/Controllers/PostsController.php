@@ -149,6 +149,11 @@ class PostsController extends Controller
         return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application replied successfully.');
     }
 
+    public function destroy(Post $post)
+    {
+        $post->delete();
+        return  redirect()->route('posts.index')->with('success', 'Post deleted successfully');
+    }
 
     public function approveApplication($applicationId)
     {
