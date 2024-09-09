@@ -130,3 +130,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::get('applications/user/post/{postId}', [ApplicationController::class, 'showUserApplications'])->name('applications.user.post');
 Route::get('applications/status', [ApplicationController::class, 'showApplications'])->name('applications.status');
 Route::get('admin/applications/post/{postId}', [AdminController::class, 'showPostApplications'])->name('admin.applications.post');
+
+// New Routes
+Route::delete('/posts/{id}', [PostsController::class, 'destroy'])->name('posts.destroy');
+Route::get('/posts/{post}', [PostsController::class, 'show'])->name('posts.show');
+

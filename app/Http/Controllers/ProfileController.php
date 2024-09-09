@@ -35,10 +35,17 @@ namespace App\Http\Controllers;
             ]);
     
             // Handle profile picture upload if present
+            // if ($request->hasFile('profile_pic')) {
+            //     $path = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
+            //     $job_seeker->profile_pic = $path;
+            // }
             if ($request->hasFile('profile_pic')) {
-                $path = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
-                $job_seeker->profile_pic = $path;
+                $file = $request->file('profile_pic');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads/profile_pics'), $filename);
+                $job_seeker->profile_pic = $filename; 
             }
+            
     
             // Update other fields
             $job_seeker->update($validated);

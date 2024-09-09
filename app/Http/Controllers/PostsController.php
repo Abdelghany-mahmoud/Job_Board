@@ -45,6 +45,21 @@ class PostsController extends Controller
         return view('posts.index', compact('posts', 'Technologies_post', 'search'));
     }
 
+    public function destroy($id)
+    {
+        // Find the post by its ID
+        $post = Post::find($id);
+
+        if (!$post) {
+            return redirect()->route('posts.index')->with('error', 'Post not found');
+        }
+
+        // Delete the post
+        $post->delete();
+
+        // Redirect with a success message
+        return redirect()->route('posts.index')->with('success', 'Post deleted successfully');
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -91,7 +106,6 @@ class PostsController extends Controller
             'comments' => $comments
         ]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
