@@ -60,7 +60,8 @@
         {{-- If the logged-in user is the comment owner, allow editing and deleting --}}
         @if (auth()->id() === $comment->user_id)
         <a class="btn btn-primary" href="{{ route('comments.edit', $comment->id) }}">Edit</a>
-
+        @endif
+        @if(auth()->user()->role === 'admin' || auth()->id() === $comment->user_id )        
         <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" style="display:inline;">
             @csrf
             @method('DELETE')
