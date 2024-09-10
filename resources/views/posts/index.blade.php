@@ -195,6 +195,7 @@
   @endif
 
   @foreach($posts as $post)
+  @if ($post->status == 'approved')
   <div style="display: flex; justify-content: space-between;" class="job-post">
     <!-- Company Logo and Name -->
     <div>
@@ -249,6 +250,8 @@
       @endcan
     </div>
   </div>
+@endif
   @endforeach
+
 </div>
 @endsection

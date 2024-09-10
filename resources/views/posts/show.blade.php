@@ -5,7 +5,7 @@
     <h1>{{ $post->title }}</h1>
     <p>{{ $post->description }}</p>
     <p>Posted by:
-        <a href="{{ route('profile.show', ['id' => $post->user->id]) }}">
+        <a href="{{ route('PostCreatorProfile.show',$post->user_id)}}">
             {{ $post->user->name }}
         </a>
         on {{ $post->created_at ? $post->created_at->format('M d, Y') : 'Date not available' }}
@@ -23,10 +23,10 @@
     </ul>
 
     <!-- Check if the authenticated user is the creator of the post -->
-    @if (Auth::id() === $post->user_id)
-    <a clas="btn btn-secondary" href="{{ route('posts.edit', $post->id) }}">Edit Post</a>
+    @if (Auth::id() === $post->user_id || Auth::user() && Auth::user()->role === 'admin')
+    <a class="btn btn-secondary" href="{{ route('posts.edit', $post->id) }}">Edit Post</a>
     <br>
-    <a href="{{ route('posts.applications', $post->id) }}">View Applications</a>
+    <a class="btn btn-secondary" href="{{ route('posts.applications', $post) }}">View Applications</a>
 
 
     @endif
@@ -37,10 +37,6 @@
     <a href="{{ route('applications.status') }}" class="btn btn-primary">View All Your Applications</a>
     @endif
 
-    @if(Auth::user() && Auth::user()->role === 'admin')
-    <!-- Only admins can see these links -->
-    <a href="{{ route('admin.applications.post', $post->id) }}" class="btn btn-primary">View All Applications on This Post (Admin)</a>
-    @endif
 
     <h3>Comments</h3>
     @if ($comments->isEmpty())
@@ -73,6 +69,7 @@
         @endif
     </div>
     @endif
+    <hr>
     @endforeach
     {{ $comments->links() }}
 
@@ -86,11 +83,11 @@
         <textarea name="content" required></textarea>
         <button class="btn btn-primary" type="submit">Add Comment</button>
     </form>
-    @if(auth()->user()->role === 'employer')
+    @if(auth()->user()->role === 'employer' || auth()->user()->role === 'admin')
     <div class="alert alert-warning">
-        Employers are not allowed to apply for jobs.
+        Employers and Admins are not allowed to apply for jobs.
     </div>
-    @elseif (auth()->user()->application->count() >= 1 && auth()->user()->application->post_id == $post->id)
+    @elseif (auth()->user()->role === 'job_seeker' && auth()->user()->application && auth()->user()->application->count() >= 1 && auth()->user()->application->post_id == $post->id)
     <div class="alert alert-warning">
         You already apllied
     </div>

@@ -61,6 +61,7 @@ class PostsController extends Controller
      */
     public function store(StorePostRequest $request)
     {
+
         $data = $request->validated();
         $data['user_id'] = Auth::id();
         $technologies = $request->technologies;
@@ -72,7 +73,7 @@ class PostsController extends Controller
                 'technology_id' => $technology,
             ]);
         }
-        return redirect()->route('posts.index')->with('success', 'Post created successfully');
+        return redirect()->route('posts.index')->with('success', 'Waiting for admin approval');
     }
 
     /**
@@ -116,20 +117,26 @@ class PostsController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = Auth::id(); // Make sure to assign the user_id
-        
+
         // Update the post
-        
+
         $post->update($data);
-        
+
         // Update the technologies associated with the post
         $technologies = $request->technologies;
         $post->technologies()->sync($technologies);
-
+        $post->status = 'pending';
+        $post->save();
         return redirect()->route('posts.show', $post)->with('success', 'Post updated successfully');
     }
     public function showPostApplications($postId)
     {
-        $post = Post::where('user_id', Auth::id())->with('applications.user')->findOrFail($postId);
+        if (Auth::user()->role === "admin") {
+            $post = Post::with('applications.user')->findOrFail($postId);
+        } else {
+
+            $post = Post::where('user_id', Auth::id())->with('applications.user')->findOrFail($postId);
+        }
         $applications = $post->applications()->paginate(10); // Paginate applications
 
         return view('posts.applications', compact('post', 'applications'));

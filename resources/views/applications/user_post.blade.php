@@ -2,7 +2,10 @@
 
 @section('content')
     <div class="container">
-        <h1>Applications for Post: {{ $applications->first()->post->title }}</h1>
+        @if($applications->first())
+        <h1>Applications for Post: 
+            {{ $applications->first()->post->title }}</h1>
+            @endif
 
         @if ($applications->count() > 0)
             <table class="table">

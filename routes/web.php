@@ -55,7 +55,7 @@ Route::put('/profile/employer/{id}', [ProfileController::class, 'updateEmployer'
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/{post}', [ProfileController::class, 'PostCreatorProfile'])->name('PostCreatorProfile.show');
 
 
 });
@@ -63,8 +63,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // Admin routes for managing post requests
-    Route::post('/posts/{post}/approve', [PostManagementController::class, 'approve'])->name('approvePost');
-    Route::post('/posts/{post}/deny', [PostManagementController::class, 'deny'])->name('denyPost');
+    Route::get('/posts/{post}/approve', [PostManagementController::class, 'approve'])->name('approvePost');
+    Route::get('/posts/{post}/deny', [PostManagementController::class, 'deny'])->name('denyPost');
 
 });
 
@@ -105,4 +105,4 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::get('applications/user/post/{postId}', [ApplicationController::class, 'showUserApplications'])->name('applications.user.post');
 Route::get('applications/status', [ApplicationController::class, 'showApplications'])->name('applications.status');
-Route::get('admin/applications/post/{postId}', [AdminController::class, 'showPostApplications'])->name('admin.applications.post');
+// Route::get('admin/applications/post/{postId}', [AdminController::class, 'showPostApplications'])->name('admin.applications.post');
