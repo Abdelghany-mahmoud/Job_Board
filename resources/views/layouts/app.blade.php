@@ -44,7 +44,7 @@
   </style>
 </head>
 
-<body>
+<body style="background: #fff;">
   <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
       <div class="container">
@@ -126,6 +126,9 @@
     <main class="py-4">
       @yield('content')
     </main>
+    <div class="py-4">
+      @yield('edit-profile')
+    </div>
   </div>
 </body>
 

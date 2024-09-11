@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     // Edit profile for job_seeker
     Route::middleware(['auth'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth')->name('profile.show');
+        Route::get('/pending', [ProfileController::class, 'pendingPosts'])->middleware('auth')->name('pending.show');
 
     });
     
@@ -97,7 +98,7 @@ Route::middleware(['auth', 'role:job_seeker'])->group(function () {
 
 // Admin routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('admin/applications', [ApplicationController::class, 'showAllApplications'])->name('admin.applications.index');
+    Route::get('admin/applications', [ApplicationController::class, 'showAllApplications'])->name('admin.applications.show');
     Route::delete('admin/applications/{id}', [ApplicationController::class, 'destroyAsAdmin'])->name('admin.applications.destroy');
 });
 

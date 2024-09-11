@@ -71,11 +71,20 @@ class Job_seekerController extends Controller
         ]);
     
  
+        // if ($request->hasFile('profile_pic')) {
+        //     // Store the new profile picture
+        //     $filePath = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
+        //     $job_seeker->profile_pic = $filePath;
+        // }
+
         if ($request->hasFile('profile_pic')) {
-            // Store the new profile picture
-            $filePath = $request->file('profile_pic')->store('profile_pics', 'profile_pics');
-            $job_seeker->profile_pic = $filePath;
+            $file = $request->file('profile_pic');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/profile_pics'), $filename);
+            $job_seeker->profile_pic = $filename; 
+            $job_seeker->save();
         }
+        
         
         // Update fields in the users table
         $user->name = $request->input('name');

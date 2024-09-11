@@ -118,7 +118,7 @@ class ProfileController extends Controller
             case 'admin':
                 // Fetch admin-specific data
                 $postsRequests = Post::where('status', 'pending')->get(); // Example post request logic
-                return view('profile.admin', ['user' => $user, 'postsRequests' => $postsRequests]);
+                return view('profile.dashboard', ['user' => $user, 'postsRequests' => $postsRequests]);
 
             case 'employer':
                 // Fetch employer-specific data
@@ -141,5 +141,9 @@ class ProfileController extends Controller
         $posts = Post::where('user_id', $user->id)->get();
         $applications = Application::whereIn('post_id', $posts->pluck('id'))->get();
         return view('profile.employer', ['user' => $user, 'posts' => $posts, 'applications' => $applications]);
+    }
+    public function pendingPosts (){
+        $postsRequests = Post::where('status', 'pending')->get(); // Example post request logic
+        return view('profile.admin', [ 'postsRequests' => $postsRequests]);
     }
 }

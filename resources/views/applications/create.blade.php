@@ -1,4 +1,9 @@
 @extends('layouts.app')
+<style>
+    form button {
+        margin-top: 20px;
+    }
+</style>
 
 @section('content')
     <div class="container">

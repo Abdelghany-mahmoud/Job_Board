@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-3">Post New Job</h1>
+    <h1 class="mb-3">Update Job</h1>
     <form action="{{route('posts.update',$post)}}" method="POST" enctype='multipart/form-data'>
         @csrf
         @method('PUT')

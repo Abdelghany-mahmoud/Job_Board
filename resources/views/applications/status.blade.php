@@ -1,7 +1,23 @@
 @extends('layouts.app')
-
+<style>
+    .update-btn {
+        border: none;
+        outline: none;
+        border-radius: 5px;
+        padding: 5px;
+        display: block;
+        margin-top: 10px;
+    }
+    /* textarea {
+        display: block;
+    } */
+    .btns {
+        margin: 10px;
+    }
+</style>
 @section('content')
 
+<div class="container">
 <h1>Your Applications</h1>
 
 @if (session('success'))
@@ -16,7 +32,7 @@
             <th>Post Title</th>
             <th>Status</th>
             <th>content</th>
-            <th>expected_salary</th>
+            <th>Expected Salary</th>
             <th>Reply</th>
             <th>Applied At</th>
             <th>Actions</th>
@@ -36,9 +52,9 @@
                 <form action="{{ route('applications.update', $application->id) }}" method="POST">
                     @csrf
                     <textarea name="reply">{{ $application->reply }}</textarea>
-                    <button type="submit">Update Reply</button>
-                    <a href="{{ route('applications.edit', $application->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                    <button class="update-btn btn btn-success" type="submit">Update Reply</button>
+                    <a href="{{ route('applications.edit', $application->id) }}" class="btns btn btn-warning">Edit</a>
+                    <button type="submit" class="btns btn  btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
 
                 </form>
                 @else
@@ -64,4 +80,5 @@
 @else
 <p>You have no applications yet.</p>
 @endif
+</div>
 @endsection

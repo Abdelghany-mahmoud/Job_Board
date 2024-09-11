@@ -1,5 +1,12 @@
 @extends('layouts.app')
-
+<style>
+    form button {
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        padding: 5px;
+    }
+</style>
 @section('content')
     <div class="container">
 
@@ -37,16 +44,16 @@
                         <form action="{{ route('applications.reply', $application->id) }}" method="POST" style="margin-bottom: 5px;">
                             @csrf
                             <textarea name="reply" placeholder="Your reply">{{ $application->reply }}</textarea>
-                            <button type="submit">Reply</button>
+                            <button style="background: #4285F4; color: #ffffff;" type="submit">Reply</button>
                         </form>
                         <!-- Approve/Deny Actions -->
                         <form action="{{ route('applications.approve', $application->id) }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit">Approve</button>
+                            <button class="btn btn-success" type="submit">Approve</button>
                         </form>
                         <form action="{{ route('applications.deny', $application->id) }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit">Deny</button>
+                            <button style="margin-left: 10px;" class="btn btn-secondary" type="submit">Deny</button>
                         </form>
                     @else
                         <span>Action Not Available</span>
