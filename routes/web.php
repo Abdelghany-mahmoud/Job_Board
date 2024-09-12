@@ -19,6 +19,7 @@ Route::get('/', function () {
     return redirect()->route('posts.index');
 });
 Route::resource('posts', PostsController::class);
+Route::get('/deleted', [PostsController::class, 'deletedPosts'])->name('posts.deleted');
 
 Route::put('/posts/{post}', [PostsController::class, 'update'])->name('posts.update');
 

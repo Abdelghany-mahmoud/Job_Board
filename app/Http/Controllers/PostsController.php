@@ -179,4 +179,13 @@ class PostsController extends Controller
 
         return redirect()->route('posts.applications', $application->post_id)->with('success', 'Application denied successfully.');
     }
+
+    public function deletedPosts()
+    {
+        // Retrieve all soft-deleted posts
+        $posts = Post::onlyTrashed()->get();
+        $Technologies_post = Technologies_post::with('technology')->get();
+        // Redirect back with a success message
+        return view('posts.deleted', ["posts" => $posts,'Technologies_post'=>$Technologies_post]);
+    }
 }

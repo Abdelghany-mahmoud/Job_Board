@@ -161,9 +161,9 @@
 
     <!-- Search Form -->
     <form style="z-index:99; position: relative;" action="{{ route('posts.index') }}" method="GET"
-    class="search-form flex justify-center mb-8">
-      <input type="text" name="search" value="{{ request('search') }}" class="form-control search-input" 
-      placeholder="Search jobs by title, company, location, or tags..." />
+      class="search-form flex justify-center mb-8">
+      <input type="text" name="search" value="{{ request('search') }}" class="form-control search-input"
+        placeholder="Search jobs by title, company, location, or tags..." />
       <button type="submit" class="search-btn">Search Jobs</button>
     </form>
   </div>
@@ -250,7 +250,7 @@
       @endcan
     </div>
   </div>
-@endif
+  @endif
   @endforeach
 
 </div>

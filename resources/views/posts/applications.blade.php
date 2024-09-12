@@ -39,7 +39,7 @@
                 <td>{{ $application->reply ?? 'No reply yet' }}</td>
                 <td>{{ $application->created_at->format('d-m-Y H:i') }}</td>
                 <td>
-                    @if ($application->status == 'pending')
+                    @if ($application->status == 'pending' && Auth::id() === $post->user_id)
                         <!-- Reply Form -->
                         <form action="{{ route('applications.reply', $application->id) }}" method="POST" style="margin-bottom: 5px;">
                             @csrf
@@ -56,7 +56,7 @@
                             <button style="margin-left: 10px;" class="btn btn-secondary" type="submit">Deny</button>
                         </form>
                     @else
-                        <span>Action Not Available</span>
+                        <span>No actions Available</span>
                     @endif
                 </td>
             </tr>
